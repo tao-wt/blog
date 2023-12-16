@@ -8,12 +8,12 @@ subtitle: '等待一朵花开，需要很多的耐心和微笑'
 description: ''
 keywords: 生活 感悟 记录 学习
 author: tao-wt@qq.com
-language: zh
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://www.tao-wt.fun/
+url: https://www.tao-wt.fun
 permalink: :title/
 permalink_defaults:
 pretty_urls:
@@ -97,7 +97,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: fluid
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
