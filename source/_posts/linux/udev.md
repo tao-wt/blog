@@ -32,6 +32,7 @@ SUBSYSTEM=="net", ACTION=="remove", KERNEL=="eth*", RUN+="/usr/local/qcloud/udev
     `program`: 运行外部程序，建议使用绝对路径
     `builtin`: 使用built-in程序
 
+#### 相关信息获取
 以上属性值可用过下列命令获取
 - `lsblk`命令用来列出块设备信息, 如uuid,label,type等等
     ```bash
