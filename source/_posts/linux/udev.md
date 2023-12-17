@@ -8,11 +8,11 @@ tags:
 categories:
   - [linux, 系统管理]
 author: Tao
+excerpt: udev是linux系统中提供设备事件的子系统，如：当一个U盘插入电脑时触发脚本，来实现自动化操作。
 ---
 ### 简介
 ---
 udev是linux系统中提供设备事件的子系统，如：当一个U盘插入电脑时触发脚本，来实现自动化操作。
-<!-- more -->
 
 ### 配置
 ---
