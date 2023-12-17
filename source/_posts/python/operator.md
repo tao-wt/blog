@@ -17,7 +17,9 @@ excerpt: 遇到的操作符问题，及python中操作符优先级说明
 >>> value = list_1 + list_2 if list_2 else ["a", "b"]
 >>> value
 ['a', 'b']
->>>
+>>> value = list_1 + (list_2 if list_2 else ["a", "b"])
+>>> value
+[1, 2, 3]
 ```
 
 ### 其它相关操作符优先级说明
