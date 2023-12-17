@@ -8,5 +8,6 @@ tags:
 categories:
   - [hexo, theme, fluid]
 author: Tao
+excerpt: 记录fluid主题使用过程的一点问题、改动和修复步骤
 ---
 ### 简介
