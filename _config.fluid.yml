@@ -282,7 +282,7 @@ web_analytics:  # 网页访问统计
     # app_id: p9hDP8HzvHuWgsszO1UmKJDU-gzGzoHsz
     # app_key: C6eplShRrS0ojsXxtLhhZDEB
     app_id: sBlBuVn8Yb7XGLhowyOfhUML-MdYXbMMI
-    alp_key: quCC4bN29da2JJZ4fgI3cWu7
+    app_key: quCC4bN29da2JJZ4fgI3cWu7
     # REST API 服务器地址，国际版不填
     # Only the Chinese mainland users need to set
     # server_url: https://p9hdp8hz.lc-cn-n1-shared.com
