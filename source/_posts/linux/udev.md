@@ -27,6 +27,7 @@ tao@debian:~# cat /etc/udev/rules.d/80-qcloud-nic.rules
 SUBSYSTEM=="net", ACTION=="add", KERNEL=="eth*", RUN+="/usr/local/qcloud/udev_run/udev_run.sh"
 SUBSYSTEM=="net", ACTION=="remove", KERNEL=="eth*", RUN+="/usr/local/qcloud/udev_run/udev_run.sh"
 ```
+
 ### 各字段说明及其信息的获取
 ---
 udev的配置文件中各字段含义如下：
