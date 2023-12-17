@@ -165,7 +165,7 @@
       return fetch(`${api_server}/1.1${url}`, {
         method,
         headers: {
-          'Access-Control-Allow-Origin' : '*',
+          'Access-Control-Allow-Origin' : 'https://www.tao-wt.fun',
           'X-LC-Id'     : appId,
           'X-LC-Key'    : appKey,
           'Content-Type': 'application/json'
