@@ -280,7 +280,7 @@ web_analytics:  # 网页访问统计
   # LeanCloud count statistics, which can be used for PV UV display. If `web_analytics: enable` is false, PV UV display will only query and not increase
   leancloud:
     app_id: p9hDP8HzvHuWgsszO1UmKJDU-gzGzoHsz
-    pp_key: C6eplShRrS0ojsXxtLhhZDEB
+    app_key: C6eplShRrS0ojsXxtLhhZDEB
     # app_id: sBlBuVn8Yb7XGLhowyOfhUML-MdYXbMMI
     # app_key: quCC4bN29da2JJZ4fgI3cWu7
     # REST API 服务器地址，国际版不填
