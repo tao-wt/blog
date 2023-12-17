@@ -31,6 +31,7 @@ SUBSYSTEM=="net", ACTION=="remove", KERNEL=="eth*", RUN+="/usr/local/qcloud/udev
 ### 各字段说明及其信息的获取
 ---
 udev的配置文件中各字段含义如下：
+
 #### 各属性key的说明
 ---
 以下是常用属性字段的简单说明，详细信息可查看`man udev`说明文档
