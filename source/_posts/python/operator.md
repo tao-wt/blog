@@ -28,7 +28,7 @@ All comparison operators have the same priority, which is lower than that of all
 
 Boolean operators and, or and not have lower priorities than comparison operators; between them, not has the highest priority and or the lowest, so that `A and not B or C` is equivalent to `(A and (not B)) or C`. As always, parentheses can be used to express表示 the desired composition作文，构成，成份. 
 
-*Note* that in Python, unlike C, assignment inside expressions must be done explicitly with the walrus海象 operator `:=`. 
+**Note** that in Python, unlike C, assignment inside expressions must be done explicitly with the walrus海象 operator `:=`. 
 ```python
 >>> if a := "wsx":
 ...     print(a)
