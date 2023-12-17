@@ -165,6 +165,7 @@
       return fetch(`${api_server}/1.1${url}`, {
         method,
         headers: {
+          'Access-Control-Allow-Origin' : '*',
           'X-LC-Id'     : appId,
           'X-LC-Key'    : appKey,
           'Content-Type': 'application/json'
