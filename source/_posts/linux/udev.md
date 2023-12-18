@@ -1,7 +1,7 @@
 ---
 title: udev 使用总结
 date: 2023-12-10 17:47:11
-index_img: /img/udev-index.jpg
+index_img: /img/index-2.jpg
 tags:
   - linux
   - 系统管理

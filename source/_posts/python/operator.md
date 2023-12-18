@@ -1,7 +1,7 @@
 ---
 title: python 操作符优先级
 date: 2023-12-17 19:12:25
-index_img: /img/cat-index.jpg
+index_img: /img/index-1.jpg
 tags:
   - python
 categories:
@@ -28,7 +28,7 @@ Comparisons can be chained. For example, `a < b == c` tests whether a is
 
 All comparison operators have the same priority, which is lower than that of all numerical数字的 operators. 
 
-Boolean operators and, or and not have lower priorities than comparison operators; between them, not has the highest priority and or the lowest, so that `A and not B or C` is equivalent to `(A and (not B)) or C`. As always, parentheses can be used to express表示 the desired composition作文，构成，成份. 
+Boolean operators `and`, `or` and `not` have lower priorities than comparison operators; between them, `not` has the highest priority and `or` the lowest, so that `A and not B or C` is equivalent to `(A and (not B)) or C`. As always, parentheses can be used to express表示 the desired composition作文，构成，成份. 
 
 **Note** that in Python, unlike C, assignment inside expressions must be done explicitly with the walrus海象 operator `:=`. 
 ```python
