@@ -14,7 +14,7 @@ excerpt: 最近在通过HTTP上传文件时遇到了一些疑问，趁此机会�
 ### Content-Type介绍
 ---
 `Content-Type`实体头部用于指示资源的`MIME`类型。
-`MIME`一般称为媒体类型(media type)，但有时也是内容类型(content type)；是指示文件类型的字符串，与文件一起发送，例如：一个声音文件可能被标记为 audio/ogg ，一个图像文件可能是 image/png。[MIME types 列表](https://www.iana.org/assignments/media-types/media-types.xhtml "Media Types")。
+`MIME`一般称为媒体类型(media type)或是内容类型(content type)；是指示文件类型的字符串，与文件一起发送，例如：一个声音文件可能被标记为 audio/ogg ，一个图像文件可能是 image/png。[MIME types 列表](https://www.iana.org/assignments/media-types/media-types.xhtml "Media Types")。
 > Content-Type: text/html; charset=utf-8
 > Content-Type: multipart/form-data; boundary=something
 
@@ -22,7 +22,7 @@ excerpt: 最近在通过HTTP上传文件时遇到了一些疑问，趁此机会�
 ---
 `multipart/form-data`和`application/octet-stream`是两种不同的HTTP`Content-Type`类型，它们分别用于不同的文件上传情况：
 - multipart/form-data 是一种用于在HTTP请求中传输表单数据和文件的标准方法。
-    > 使用这个类型时，HTTP请求会被分成多个部分，每个部分包含一个表单字段或文件数据。这些部分会使用特定的**分隔符(boundary)**分隔开来，以便服务器能够正确地解析请求。
+    > 使用这个类型时，HTTP请求会被分成多个部分，每个部分包含一个表单字段或文件数据。这些部分会使用特定的分隔符(**boundary**)分隔开来，以便服务器能够正确地解析请求。
 - application/octet-stream 是一种通用的 MIME 类型，表示二进制数据流。
     > 通常用于传输不带任何元数据的二进制数据，比如图像、音频、视频等文件。当使用application/octet-stream时，HTTP请求的**Body**直接包含二进制数据流，而没有其他任何信息。
 
