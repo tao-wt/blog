@@ -8,14 +8,13 @@ tags:
   - python
 categories:
   - [network, HTTP]
-  - [python, aiohttp]
 author: tao-wt@qq.com
 excerpt: 最近在通过HTTP上传文件时遇到了一些疑问，趁此机会将上传文件时所涉及的协议细节进行一次总结和提炼
 ---
 ### Content-Type介绍
 ---
 `Content-Type`实体头部用于指示资源的`MIME`类型。
-`MIME`一般称为**媒体类型(media type)**，但有时也是**内容类型(content type)**；是指示文件类型的字符串，与文件一起发送，例如：一个声音文件可能被标记为 audio/ogg ，一个图像文件可能是 image/png。**[MIME types 列表](https://www.iana.org/assignments/media-types/media-types.xhtml "Media Types")**。
+`MIME`一般称为媒体类型(media type)，但有时也是内容类型(content type)；是指示文件类型的字符串，与文件一起发送，例如：一个声音文件可能被标记为 audio/ogg ，一个图像文件可能是 image/png。[MIME types 列表](https://www.iana.org/assignments/media-types/media-types.xhtml "Media Types")。
 > Content-Type: text/html; charset=utf-8
 > Content-Type: multipart/form-data; boundary=something
 
