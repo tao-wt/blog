@@ -1,17 +1,16 @@
 ---
-title: 深入理解通过HTTP上传文件时所涉及的不同Conten-Type头部
+title: 深入理解HTTP协议的文件上传
 date: 2024-1-5 13:20:52
 index_img: /img/index-4.jpg
 tags:
   - HTTP
   - network
   - python
-  - asyncio
 categories:
   - [network, HTTP]
   - [python, aiohttp]
 author: tao-wt@qq.com
-excerpt: 之前通过HTTP上传文件时并没有深究过HTTP协议里的相关细节，直到最近在进行文件上传时遇到了一些问题，所以趁此机会将上传文件时所涉及的字段和协议细节进行一次汇总、学习和提炼
+excerpt: 最近在通过HTTP上传文件时遇到了一些疑问，趁此机会将上传文件时所涉及的协议细节进行一次总结和提炼
 ---
 ### Content-Type介绍
 ---
@@ -73,7 +72,7 @@ A multipart/form-data body contains a series of parts separated by a boundary.
 5. Other "Content-" Header Fields
     The multipart/form-data media type does not support any MIME header fields in parts other than Content-Type, Content-Disposition and  Content-Transfer-Encoding.
 
-> HTML表单元素: 文本框（<input type="text">）、密码框（<input type="password">）、复选框（<input type="checkbox">）、单选框（<input type="radio">）、下拉列表（<select>）、文本区域（<textarea>）等。
+> HTML表单元素: 文本框（&lt;input type="text"&gt;）、密码框（&lt;input type="password"&gt;）、复选框（&lt;input type="checkbox"&gt;）、单选框（&lt;input type="radio"&gt;）、下拉列表（&lt;select&gt;）、文本区域（&lt;textarea&gt;）等。
 > 表单提交时数据可以通过两种方法提交到服务器：GET和POST。GET方法将表单数据添加到URL的末尾，适用于小量非敏感数据。POST方法将表单数据包含在HTTP请求体中，适用于大量或敏感数据。
 > 表单数据在提交前需要进行编码。HTML表单支持两种编码类型：application/x-www-form-urlencoded和multipart/form-data。前者用于普通表单数据（键值对），后者用于包含文件上传的表单。
 > 在 application/x-www-form-urlencoded 格式中，表单数据被编码为 key-value 对，key 和 value 之间用等号（=）连接，而不同的 key-value 对之间用&符号分隔。这种格式还会对某些字符进行 URL 编码（也称为百分比编码），例如空格会被编码为 “+”, 特殊字符 “@” 会被编码为 “%40”。
