@@ -76,9 +76,18 @@ A multipart/form-data body contains a series of parts separated by a boundary.
 5. Other "Content-" Header Fields
     The multipart/form-data media type does not support any MIME header fields in parts other than Content-Type, Content-Disposition and  Content-Transfer-Encoding.
 
-> HTML表单元素: 文本框（&lt;input type="text"&gt;）、密码框（&lt;input type="password"&gt;）、复选框（&lt;input type="checkbox"&gt;）、单选框（&lt;input type="radio"&gt;）、下拉列表（&lt;select&gt;）、文本区域（&lt;textarea&gt;）等。
+> HTML常见表单元素:
+> - 文本框: &lt;input type="text"&gt;
+> - 密码框: &lt;input type="password"&gt;
+> - 复选框: &lt;input type="checkbox"&gt;
+> - 单选框: &lt;input type="radio"&gt;
+> - 下拉列表: &lt;select&gt;
+> - 文本区域: &lt;textarea&gt;
+> 
 > 表单提交时数据可以通过两种方法提交到服务器：GET和POST。GET方法将表单数据添加到URL的末尾，适用于小量非敏感数据。POST方法将表单数据包含在HTTP请求体中，适用于大量或敏感数据。
+> 
 > 表单数据在提交前需要进行编码。HTML表单支持两种编码类型：application/x-www-form-urlencoded和multipart/form-data。前者用于普通表单数据（键值对），后者用于包含文件上传的表单。
+> 
 > 在 application/x-www-form-urlencoded 格式中，表单数据被编码为 key-value 对，key 和 value 之间用等号（=）连接，而不同的 key-value 对之间用&符号分隔。这种格式还会对某些字符进行 URL 编码（也称为百分比编码），例如空格会被编码为 “+”, 特殊字符 “@” 会被编码为 “%40”。
 
 ### multipart/form-data脚本例子
