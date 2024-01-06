@@ -62,7 +62,7 @@ main() {
 ```
 
 输出log如下:
-```log
+```
 [INFO] >>> Executing: main
 [INFO] >>> Executing: YANF process 777
 [INFO] >>> Executing: YNC process 999
@@ -101,5 +101,5 @@ analyze_with_timeout() {
 }
 ```
 > `timeout`参数说明:
-> analyze_duration: kill the command if still running after analyze_duration
-> kill_after: also send a **KILL** signal if command is still running this long after the initial signal was sent
+> **analyze_duration**: kill the command if still running after analyze_duration
+> **kill_after**: also send a **KILL** signal if command is still running this long after the initial signal was sent
