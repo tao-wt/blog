@@ -13,9 +13,12 @@ excerpt: 最近在通过HTTP上传文件时遇到了一些疑问，趁此机会�
 ---
 ## Content-Type介绍
 `Content-Type`实体头部用于指示资源的`MIME`类型。
-`MIME`一般称为媒体类型(media type)或是内容类型(content type)；是指示文件类型的字符串，与文件一起发送，例如：一个声音文件可能被标记为 audio/ogg ，一个图像文件可能是 image/png。[MIME types 列表](https://www.iana.org/assignments/media-types/media-types.xhtml "Media Types")。
-> Content-Type: text/html; charset=utf-8
-> Content-Type: multipart/form-data; boundary=something
+`MIME`一般称为媒体类型(media type)或是内容类型(content type)；是指示文件类型的字符串，与文件一起发送，例如：一个声音文件可能被标记为 audio/ogg ，一个图像文件可能是 image/png。例子:
+```HTTP
+Content-Type: text/html; charset=utf-8
+Content-Type: multipart/form-data; boundary=something
+```
+参考[MIME types 列表](https://www.iana.org/assignments/media-types/media-types.xhtml "Media Types")。
 
 ## 上传文件时的Content-Type
 `multipart/form-data`和`application/octet-stream`是两种不同的HTTP`Content-Type`类型，它们分别用于不同的文件上传情况：
