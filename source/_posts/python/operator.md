@@ -8,8 +8,7 @@ categories:
   - python
 excerpt: 遇到的操作符问题，及python中操作符优先级说明
 ---
-### 使用python时遇到的运算符优先级问题
----
+## 使用python时遇到的运算符优先级问题
 以下代码在`list_2`为空时返回`else`后面的值，若期望在`list_2`为空时返回`if`后面的值，则需要使用括号。
 ```python
 >>> list_1 = [1, 2, 3]
@@ -22,8 +21,7 @@ excerpt: 遇到的操作符问题，及python中操作符优先级说明
 [1, 2, 3]
 ```
 
-### 其它相关操作符优先级说明
----
+## 操作符优先级说明-摘自[官方文档](https://docs.python.org/3/tutorial/datastructures.html#more-on-conditions)
 Comparisons can be chained. For example, `a < b == c` tests whether a is less than b and moreover b equals c. 
 
 All comparison operators have the same priority, which is lower than that of all numerical数字的 operators. 

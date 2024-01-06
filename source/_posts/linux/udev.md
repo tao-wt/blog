@@ -10,12 +10,10 @@ categories:
 author: Tao
 excerpt: udev是linux系统中提供设备事件的子系统，如：当一个U盘插入电脑时触发脚本，来实现自动化操作。
 ---
-### 简介
----
+## 简介
 udev是linux系统中提供设备事件的子系统，如：当一个U盘插入电脑时触发脚本，来实现自动化操作。
 
-### 配置
----
+## 配置
 udev的配置文件一般位于`/etc/udev/rules.d/`目录下，rule文件名最前面的数字字段代表这条rule的优先级，数字越大优先级越低。例如：
 ``` bash
 root@debian:~# ls -l /etc/udev/rules.d/
@@ -28,12 +26,10 @@ SUBSYSTEM=="net", ACTION=="add", KERNEL=="eth*", RUN+="/usr/local/qcloud/udev_ru
 SUBSYSTEM=="net", ACTION=="remove", KERNEL=="eth*", RUN+="/usr/local/qcloud/udev_run/udev_run.sh"
 ```
 
-### 各字段说明及其信息的获取
----
+## 各字段说明及其信息的获取
 udev的配置文件中各字段含义如下：
 
-#### 各属性key的说明
----
+### 各属性key的说明
 以下是常用属性字段的简单说明，详细信息可查看`man udev`说明文档
 - `SUBSYSTEM`: 匹配事件设备的系统设备类型，例如，若是磁盘则为`block`
 - `ACTION`: 指对应设备(如U盘)的插入或移除
@@ -45,8 +41,7 @@ udev的配置文件中各字段含义如下：
     `program`: 运行外部程序，建议使用绝对路径
     `builtin`: 使用built-in程序
 
-#### 相关信息获取
----
+### 相关信息获取
 以上属性值可用过下列命令获取
 - `lsblk`命令用来列出块设备信息, 如uuid,label,type等等
     ```bash
@@ -87,22 +82,19 @@ udev的配置文件中各字段含义如下：
     ```
 - `udevadm monitor`常用来实时输出设备事件信息
 
-#### 常用操作符说明
----
+### 常用操作符说明
 - `==`: 比较key是否等于给定的值或匹配模式
 - `!=`: 判断不等于
 - `+=`: 将一个值添加到一个key，即一个key的值可能是列表，如上面`run+=`
 - `=`: 将值赋给key，列表会被覆盖
 
-#### 常用匹配模式说明
----
+### 常用匹配模式说明
 - `*`: 匹配零个或多个字符
 - `?`: 匹配任意单个字符
 - `[]`: 匹配位于中括号中的单个的字符，如"tty[SR]"
 - `|`: 可用来指定多个匹配模式，如，"abc|x*"将匹配"abc"或是"x*"
 
-### 加载配置文件
----
+## 加载配置文件
 经过以上信息查找，当指定的label的U盘插入电脑时触发自动化操作的rule如下；其中会将device的label当作参数传给脚本，在脚本运行前`%E{ID_FS_LABEL}`会进行变量替换，变量含义请参考上面属性字段说明
 ```bash
 tao@z20:~$ cat /etc/udev/rules.d/80-local.rules

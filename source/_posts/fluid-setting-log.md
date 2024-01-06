@@ -10,8 +10,7 @@ categories:
 author: Tao
 excerpt: 记录fluid主题使用过程中碰到的两个问题, 个对应的改动和修复步骤.
 ---
-### 访问Googletagmanager导致页面加载时间长
----
+## 访问Googletagmanager导致页面加载时间长
 fluid主题的web_analytics配置中虽然设置了Google Tag Manager相关参数为空，但在实际运行时还是会尝试连接，导致页面一直处于加载资源的状态：
 ![错误截图](/img/googletagma-error.jpg)
 
@@ -45,7 +44,6 @@ web_analytics:
   # measurement_id:
 ```
 
-### 网站访问计数不增长的问题
----
+## 网站访问计数不增长的问题
 经过分析发现是leancloud的Counter写权限的问题，默认情况下，Counter object的权限是只读的，需要修改为可写才能正常计数。
 ![修改ACL](/img/counter-acl.jpg)
