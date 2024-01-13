@@ -78,12 +78,12 @@ A `multipart/form-data` body contains a series of parts separated by a `boundary
     The `multipart/form-data` media type does not support any MIME header fields in parts other than `Content-Type`, `Content-Disposition` and  `Content-Transfer-Encoding`.
 
 > HTML常见表单元素:
-> - 文本框: `&lt;input type="text"&gt;`
-> - 密码框: `&lt;input type="password"&gt;`
-> - 复选框: `&lt;input type="checkbox"&gt;`
-> - 单选框: `&lt;input type="radio"&gt;`
-> - 下拉列表: `&lt;select&gt;`
-> - 文本区域: `&lt;textarea&gt;`
+> - 文本框: `<input type="text">`
+> - 密码框: `<input type="password">`
+> - 复选框: `<input type="checkbox">`
+> - 单选框: `<input type="radio">`
+> - 下拉列表: `<select>`
+> - 文本区域: `<textarea>`
 > 
 > 表单提交时数据可以通过两种方法提交到服务器：`GET`和`POST`。`GET`方法将表单数据添加到URL的末尾，适用于小量非敏感数据。`POST`方法将表单数据包含在HTTP请求体中，适用于大量或敏感数据。
 > 
