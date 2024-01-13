@@ -15,9 +15,10 @@ excerpt: 总结在之前工作中使用过的，在windows中设置程序自启�
 ## 创建服务(service)
 这种方式主要用于windows server版本，可以在`开始`或者`搜索`里查找services来启动services管理器，创建服务。
 对于jenkins slave可以通过`javaws`命令来创建:
-'''bat
+```bat
 javaws jenkins-slave.jnlp
-'''
+```
+
 > 注:
 > 1 jenkins-slave.jnlp从jenkins slave详情页面下载
 > 2 当服务以本地系统账户运行时可以设置是否能和桌面进行交互
