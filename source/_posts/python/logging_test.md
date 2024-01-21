@@ -145,7 +145,7 @@ tao@Dell:~/python_test$ python test_logging.py
 2024-01-21 15:33:13,694 collect_results root INFO     collect_results done
 ```
 
-### 问题分析
+## 问题分析
 猜测应该是主程序创建进程时，子进程携带有父进程的一些对象信息，所有修改上面脚本加一些debug输出
 ```python
 import random
@@ -286,19 +286,15 @@ MainProcess       4908   INFO     main finish
 2. MainProcess       4908   INFO     after listen: [<StreamHandler <stderr> (NOTSET)>]
     运行`listener_configure`函数配置后，主程序root logger有一个`StreamHandler`, **它没有设置level，所以会使用与其关联的root logger的日志等级**，即`logging.DEBUG`。这一步也ok
 3. MainProcess       4908   INFO     main start ；这步ok
-4. MainProcess       4908   INFO     call from TestCase: w c: [<StreamHandler <stderr> (NOTSET)>, <QueueHandler (NOTSET)>]
-    这是在TestCase里`__init__`方法里调用`worker_configure`产生的输出
-    这个输出就差不多发现问题了，本应该出现在子进程TestCase中的输出，出现在了主进程里，导致主进程handler列表额外多了一个`QueueHandler`对象，这也是出现后面三行输出的原因。
+4. 第5行，是在TestCase里`__init__`方法里调用`worker_configure`产生的输出。
+    这个输出就差不多发现问题了，本应该出现在子进程TestCase中的输出，出现在了主进程里，导致主进程handler列表额外多了一个`QueueHandler`对象，这也是出现后面第6-8行输出的原因。
     这一步说明：**继承自`multiprocessing.Process`的TestCase子类创建新的进程时，`__init__`初始化方法是在父进程中执行的**
-5. collect_results   16440  INFO     call from collect_r: w c: [<QueueHandler (NOTSET)>]
-    这是collect_results进程的输出，经过`worker_configure`配置后，collect_results进程有只有一个`QueueHandler`，这步ok，其下面的第10行输出也ok
+5. 第9行是collect_results进程的输出，经过`worker_configure`配置后，collect_results进程有只有一个`QueueHandler`，这步ok，其下面的第10行输出也ok
 6. 接下来第11-13行是TestCase进程的输出：
-    TestCase-2 logging handlers: []
-    TestCase-2 logging handlers after call: [<StreamHandler <stderr> (NOTSET)>]
-    WARNING:root:Doing some work from TestCase-2
-    其中前两行是`logging.info('%s, started', name)`语句(由于日志等级低于WARNNING所以没有被输出)前后两个`print`语句的输出:
+    其中第11, 12行是`logging.info('%s, started', name)`语句(由于日志等级低于WARNNING所以没有被输出)前后两个`print`语句的输出:
     - 在TestCase-2进程第一次调用logging函数前，`handlers`列表为空
     - 在第一次调用`logging.info`函数后，root logger的`handlers`列表包含一个`StreamHandler`
+
     上面第三行log是`logging.warning('Doing some work from %s', name)`语句的输出
     > 摘自[官方文档](https://docs.python.org/3/howto/logging.html "logging HOWTO")：
     > The `INFO` message doesn’t appear because the default level is `WARNING`. 
@@ -376,6 +372,7 @@ MainProcess       210618 INFO     main finish
 通过上面的分析，优化点只要在以下两个方面：
 - 对于以`multiprocessing.Process`子类的方式创建子进程，需要将`worker_configure`函数的调用从`__init__`方法移动到`run`方法或其它方法。
 - 如果在linux系统上运行，则需要在子进程开始时移除logging模块从父进程继承过来的`handler`
+
 优化后的脚本如下：
 ```python
 import random
