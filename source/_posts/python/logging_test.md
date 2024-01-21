@@ -288,19 +288,19 @@ MainProcess       4908   INFO     main finish
 3. MainProcess       4908   INFO     main start ；这步ok
 4. 第5行，是在TestCase里`__init__`方法里调用`worker_configure`产生的输出。
     这个输出就差不多发现问题了，本应该出现在子进程TestCase中的输出，出现在了主进程里，导致主进程handler列表额外多了一个`QueueHandler`对象，这也是出现后面第6-8行输出的原因。
-    这一步说明：**继承自`multiprocessing.Process`的TestCase子类创建新的进程时，`__init__`初始化方法是在父进程中执行的**
-5. 第9行是collect_results进程的输出，经过`worker_configure`配置后，collect_results进程有只有一个`QueueHandler`，这步ok，其下面的第10行输出也ok
+    由此可看出：**继承自`multiprocessing.Process`的子类TestCase创建新进程时，`__init__`初始化方法是在父进程中执行的！**
+5. 第9行是collect_results进程的输出，经过`worker_configure`配置后，collect_results进程有只有一个`QueueHandler`，这步ok，后面的第10行输出也ok
 6. 接下来第11-13行是TestCase进程的输出：
     其中第11, 12行是`logging.info('%s, started', name)`语句(由于日志等级低于WARNNING所以没有被输出)前后两个`print`语句的输出:
     - 在TestCase-2进程第一次调用logging函数前，`handlers`列表为空
     - 在第一次调用`logging.info`函数后，root logger的`handlers`列表包含一个`StreamHandler`
 
-    上面第13行是`logging.warning('Doing some work from %s', name)`语句的输出
+    第13行是`logging.warning('Doing some work from %s', name)`语句的输出
     > 摘自[官方文档](https://docs.python.org/3/howto/logging.html "logging HOWTO")：
     > The `INFO` message doesn’t appear because the default level is `WARNING`. 
     > The call to `basicConfig()` should come before any calls to `debug()`, `info()`, etc. Otherwise, those functions will call `basicConfig()` for you with the default options. As it’s intended as a one-off simple configuration facility, only the first call will actually do anything: subsequent calls are effectively no-ops.
 
-    通过第11-13行的输出说明：**windows平台multiprocessing创建的子进程并没有继承父进程的环境，而是启动新的解释器环境**，windows上创建新进程的默认方法为**spawn**：
+    从第11-13行的输出可以看出：**windows平台multiprocessing创建的子进程并没有继承父进程的环境，而是启动新的解释器进程，创建新的环境**，windows上创建新进程的默认方法为**spawn**：
     ```python
     >>> import multiprocessing
     >>> multiprocessing.get_start_method
