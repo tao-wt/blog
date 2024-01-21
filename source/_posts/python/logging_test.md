@@ -12,7 +12,10 @@ excerpt: 使用logging模块时遇到的奇怪问题
 ---
 ## 背景
 最近在写测试用例的自动化调度脚本时，用logging做的日志记录，但是脚本在运行时日志输出和预想的相差很多...
-代码逻辑：主进程首先创建一个子进程collect_result来收集和处理每个testcase进程的运行结果，如日志的上传。然后主程序循环串行的为每个要执行的用例脚本创建新的进程testcase运行其代码，并将用例脚本的结果通过队列传递给collect_result进程。另外，所有子进程的日志都通过`logging.handlers.QueueHandler`传递给父进程的`logging.handlers.QueueListener`线程由其统一处理。
+代码逻辑是这样：
+1. 主进程首先创建一个子进程collect_result来收集和处理每个TestCase进程的运行结果，如日志的上传等。
+2. 然后主程序循环串行的为每个要执行的测试用例创建新的进程testcase，在testcase进程中运行测试代码，这个进程在测试用例执行结束后会将结果通过队列传递给collect_result进程。
+3. 所有子进程的日志都通过`logging.handlers.QueueHandler`传递给父进程的`logging.handlers.QueueListener`线程，由其统一处理。
 
 ## 代码
 代码如下：
@@ -300,6 +303,7 @@ MainProcess       4908   INFO     main finish
     > 摘自[官方文档](https://docs.python.org/3/howto/logging.html "logging HOWTO")：
     > The `INFO` message doesn’t appear because the default level is `WARNING`. 
     > The call to `basicConfig()` should come before any calls to `debug()`, `info()`, etc. Otherwise, those functions will call `basicConfig()` for you with the default options. As it’s intended as a one-off simple configuration facility, only the first call will actually do anything: subsequent calls are effectively no-ops.
+
     通过这三个输出证明，**windows平台multiprocessing创建的子进程并没有继承父进程的环境，而是启动新的解释器环境**，windows上创建新进程的默认方法为**spawn**：
     ```python
     >>> import multiprocessing
