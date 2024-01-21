@@ -295,12 +295,12 @@ MainProcess       4908   INFO     main finish
     - 在TestCase-2进程第一次调用logging函数前，`handlers`列表为空
     - 在第一次调用`logging.info`函数后，root logger的`handlers`列表包含一个`StreamHandler`
 
-    上面第三行log是`logging.warning('Doing some work from %s', name)`语句的输出
+    上面第13行是`logging.warning('Doing some work from %s', name)`语句的输出
     > 摘自[官方文档](https://docs.python.org/3/howto/logging.html "logging HOWTO")：
     > The `INFO` message doesn’t appear because the default level is `WARNING`. 
     > The call to `basicConfig()` should come before any calls to `debug()`, `info()`, etc. Otherwise, those functions will call `basicConfig()` for you with the default options. As it’s intended as a one-off simple configuration facility, only the first call will actually do anything: subsequent calls are effectively no-ops.
 
-    通过这三个输出证明，**windows平台multiprocessing创建的子进程并没有继承父进程的环境，而是启动新的解释器环境**，windows上创建新进程的默认方法为**spawn**：
+    通过第11-13行的输出说明：**windows平台multiprocessing创建的子进程并没有继承父进程的环境，而是启动新的解释器环境**，windows上创建新进程的默认方法为**spawn**：
     ```python
     >>> import multiprocessing
     >>> multiprocessing.get_start_method
