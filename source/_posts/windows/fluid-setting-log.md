@@ -4,21 +4,29 @@ date: 2024-1-13 17:33:55
 index_img: /img/index-6.jpg
 tags:
   - windows
-  - 系统配置
+  - 系统管理
   - jenkins
 categories:
-  - [windows, 系统配置]
+  - [windows, 系统管理]
   - jenkins
 author: tao-wt@qq.com
 excerpt: 总结在之前工作中使用过的，在windows中设置程序自启动的常见的四种方式, 以jenkins slave启动为例
 ---
 ## 创建服务(service)
-这种方式主要用于windows server版本，可以在`开始`或者`搜索`里查找services来启动services管理器，创建服务。
-对于jenkins slave可以通过`javaws`命令来创建:
+可以在`开始`或者`搜索`里查找`service.msc`来启动服务管理器,查看和管理系统服务。管理服务也可以通过`sc`命令，例如：
+```bat
+sc create TaoService binpath= "path\to\program" start= auto displayname= "WindowsServiceTest"
+sc start TaoService
+sc description TaoService "just a test service" 
+sc stop TaoService
+sc delete TaoService
+```
+> 注意: 所有的等号和值之间需要一个空格(等号前不要空格，等号后要一个空格)！
+
+对于jenkins slave也可以通过`javaws`命令来创建jenkins-slave服务:
 ```bat
 javaws jenkins-slave.jnlp
 ```
-
 > 注:
 > 1 jenkins-slave.jnlp从jenkins slave详情页面下载
 > 2 当服务以本地系统账户运行时可以设置是否能和桌面进行交互
