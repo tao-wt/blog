@@ -22,15 +22,15 @@ Content-Type: multipart/form-data; boundary=something
 
 ## 上传文件时的`Content-Type`
 `multipart/form-data`和`application/octet-stream`是两种不同的HTTP`Content-Type`类型，它们分别用于不同的文件上传情况：
-- multipart/form-data 是一种用于在HTTP请求中传输表单数据和文件的标准方法。
+- `multipart/form-data`是一种用于在HTTP请求中传输表单数据和文件的标准方法。
     > 使用这个类型时，HTTP请求会被分成多个部分，每个部分包含一个表单字段或文件数据。这些部分会使用特定的分隔符(**boundary**)分隔开来，以便服务器能够正确地解析请求。
 - `application/octet-stream`是一种通用的`MIME`类型，表示二进制数据流。
     > 通常用于传输不带任何元数据的二进制数据，比如图像、音频、视频等文件。当使用`application/octet-stream`时，HTTP请求的**Body**直接包含二进制数据流，而没有其他任何信息。
 
 ### `application/octet-stream`例子
-> The "octet-stream" subtype is used to indicate that a body contains arbitrary binary data. which has two optional parameters TYPE and PADDING.
+> The **octet-stream** subtype is used to indicate that a body contains arbitrary binary data. which has two optional parameters `TYPE` and `PADDING`.
 
-通过HTTP PUT请求向华为OBS对象存储上传文件时，文件内容就是`PUT`请求Body的所有内容
+通过HTTP `PUT`请求向华为OBS对象存储上传文件时，文件内容就是`PUT`请求Body的所有内容
 ```python
 async def obs_put(file_path):
     size = os.path.getsize(file_path)
