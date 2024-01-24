@@ -101,3 +101,20 @@ tao@z20:~$ cat /etc/udev/rules.d/80-local.rules
 SUBSYSTEM=="block", ACTION=="add", ENV{ID_FS_LABEL}=="OUR_EP|OUR_CJ|OUR_SNM", RUN+="/home/tao/trigger.sh %E{ID_FS_LABEL}"
 ```
 配置确认无误后通过`udevadm control --reload`命令重新加载配置文件
+
+## ubuntu22 利用udev修改网卡名字
+临时修改网卡名字可以通过以下命令：
+```bash
+sudo ip link set eno1 name eth1_hil1
+```
+
+通过udev修改重启不失效, 字段`ATTR{address}`用来匹配指定网卡的mac地址
+```
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="f0:e0:0d:00:04:e2", NAME="1E-VI123456"
+```
+
+> refer to
+> NAME:
+> The name to use for a network interface. See **systemd.link(5)** for a higher-level mechanism for setting the interface name. The name of a device node cannot be changed by udev, only additional symlinks can be created.
+
+也可以通过在`/etc/systemd/network/`目录创建`.link`配置文件(ini语法)来实现修改网卡的名字, 请参考`man systemd.link`手册
