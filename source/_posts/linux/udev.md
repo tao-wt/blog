@@ -105,7 +105,7 @@ SUBSYSTEM=="block", ACTION=="add", ENV{ID_FS_LABEL}=="OUR_EP|OUR_CJ|OUR_SNM", RU
 ## ubuntu22 利用udev修改网卡名字
 临时修改网卡名字可以通过以下命令：
 ```bash
-sudo ip link set eno1 name eth1_hil1
+sudo ip link set origin_name name new_name
 ```
 
 通过udev修改重启不失效, 字段`ATTR{address}`用来匹配指定网卡的mac地址
