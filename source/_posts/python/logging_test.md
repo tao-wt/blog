@@ -362,9 +362,9 @@ MainProcess       210618 INFO     main nearly finifsh
 MainProcess       210618 INFO     main finish
 ```
 分析过程和windows一样，这里只说明关键点：
-1. 第5行的输出说明，linux平台上multiprocessing模块在创建进程时，`Process`子类的`__init__`方法也是在父进程执行，这点和windows的执行过程一样；即，**不论windows还是linux，`Process`子类的`__init__`方法在创建多进程时都是在父进程执行。**
+1. 第5行的输出说明，linux平台上multiprocessing模块在创建进程时，`Process`子类的`__init__`方法也是在父进程执行，这点和windows的执行过程一样；即，**不论windows还是linux，`Process`子类的`__init__`方法在创建多进程时都是在父进程执行**。
 2. 第6行的collect_result进程调用`worker_configure`函数产生的输出显示，在linux系统collect_result进程比windows系统多了一个`StreamHandler`对象(继承自父进程)。这说明：**linux系统上multiprocessing模块(通过默认的`fork`调用)创建的新进程会继承父进程的环境**
-3. 后面每次创建新的TestCase子进程时，都会使父进程的root logger的handler(`QueueHandler`)数量加1
+3. 后面每次创建新的TestCase子进程时，都会使父进程的root logger的handler(`QueueHandler`)数量加1, 而TestCase进程启动时又都会继承父进程所有的`handler`，所以TestCase进程的输出会一次比一次多。注意，新的TestCase进程只有一个线程，即父进程中调用fork的那个线程的副本，所以TestCase子进程中的`QueueHandler`输出还是通过父进程进行输出。
 
 经过上面分析说明，在linux平台上当multiprocessing通过`fork`系统调用创建进程时，子进程会复制父进程的环境，所以才导致linux上的输出比windows上多了很多
 
