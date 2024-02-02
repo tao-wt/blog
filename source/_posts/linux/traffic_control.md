@@ -13,11 +13,14 @@ categories:
 author: tao-wt@qq.com
 excerpt: 最近测试人员提了一个弱网环境的测试需求，本文描述了使用tc命令实现的流量控制的脚本，模拟弱网环境
 ---
+> `tc`命令的使用细节，可以参考脚本后面的内容，这些内容提取自`tc`命令的说明手册，侧重于从整体上说明`tc`命令的用法和脚本中所涉及的`qdisc`, `class`和`filter`；若要深入理解`tc`命令，可参考[tc-iproute2帮助手册](https://manpages.debian.org/unstable/iproute2/tc.8.en.html "帮助手册地址")。
+
 ## 脚本
-脚本如下：
-```bash
-#!/vendor/bin/sh
+sh脚本如下：
+```sh
+#!/usr/bin/sh
 set -e
+set -o pipefail
 
 
 die() {
@@ -237,10 +240,11 @@ if [ "${1}" != "--source-only" ]; then
     # trap cleanup EXIT
     run traffic_control
 fi
+
 ```
 
 ## 命令简介
-`tc`命令主要是用来查看/操作内核中的traffic control的设置。本文部分描述摘自[tc-iproute2帮助手册](https://manpages.debian.org/unstable/iproute2/tc.8.en.html "帮助手册地址")。
+`tc`命令主要是用来查看/操作内核中的traffic control的设置。
 
 ## TC DESCRIPTION
 Traffic Control由以下概念组成：
