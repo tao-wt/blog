@@ -11,7 +11,7 @@ categories:
   - [linux, shell, bash]
   - [linux, tc]
 author: tao-wt@qq.com
-excerpt: 最近测试团队提了一个弱网环境的测试需求，本文描述了使用tc命令实现的流量控制的脚本，模拟弱网环境
+excerpt: 最近测试团队提了一个弱网环境的测试需求，本文提供了一个使用tc命令实现的流量控制的脚本，用来模拟弱网环境
 ---
 > `tc`命令的使用细节，可以参考脚本后面的内容，这些内容提取自`tc`命令的说明手册，侧重于从整体上说明`tc`命令的用法和脚本中所涉及的`qdisc`, `class`和`filter`；若要深入理解`tc`命令，可参考[tc-iproute2帮助手册](https://manpages.debian.org/unstable/iproute2/tc.8.en.html "帮助手册地址")。
 
