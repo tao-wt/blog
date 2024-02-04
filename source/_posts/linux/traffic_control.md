@@ -11,9 +11,90 @@ categories:
   - [linux, shell, bash]
   - [linux, tc]
 author: tao-wt@qq.com
-excerpt: 最近测试团队提了一个弱网环境的测试需求，本文提供了一个使用tc命令实现流量控制的脚本，用来模拟弱网环境
+excerpt: 最近测试人员提了一个弱网环境的测试需求，本文描述了使用tc命令实现的流量控制的脚本，模拟弱网环境
 ---
-> `tc`命令的使用细节，可以参考脚本后面的内容，这些内容提取自`tc`命令的说明手册，侧重于从整体上说明`tc`命令的用法和脚本中所涉及的`qdisc`, `class`和`filter`；若要深入理解`tc`命令，可参考[tc-iproute2帮助手册](https://manpages.debian.org/unstable/iproute2/tc.8.en.html "帮助手册地址")。
+> `tc`命令的使用细节，可以参考脚本后面的内容，这些内容提取自`tc`命令的说明手册，侧重于从整体上说明`tc`命令的用法和脚本中所涉及的`qdisc`, `class`和`filter`的概念/描述；若要深入理解，可参考[tc-iproute2帮助手册](https://manpages.debian.org/unstable/iproute2/tc.8.en.html "帮助手册地址")。
+
+## 脚本使用
+可以通过`--help`, `-h`参数来获取脚本帮助:
+```
+tao@S20:~/tao$ sudo sh test.sh -h
+---------test.sh usage:-------------
+this script support follow paramters:
+  --addr/-a: the ip address, separate by ','
+  --clean/-c: boolean, remove the traffic control setting
+  --devices/-d: the network interfaces, separate by ','
+  --delay/-e: int, the packet delay, default 900, (900ms)
+  --loss/-l: int, the packet loss, default 50, (50%)
+  --rate/-r: int, the traffic rate, default 100, (100kbps)
+-------------------------------------------
+tao@S20:~/tao$ 
+```
+这个流量控制脚本可以设置指定网卡(指定IP)的速率、延迟和丢包率。在进行流量控制之前，`ping`和`curl`命令的输出如下：
+```
+tao@S20:~/tao$ ping baidu.com
+PING baidu.com (39.156.66.10) 56(84) bytes of data.
+64 bytes from 39.156.66.10: icmp_seq=1 ttl=52 time=26.3 ms
+64 bytes from 39.156.66.10: icmp_seq=2 ttl=52 time=26.1 ms
+64 bytes from 39.156.66.10: icmp_seq=3 ttl=52 time=26.0 ms
+^C64 bytes from 39.156.66.10: icmp_seq=4 ttl=52 time=26.3 ms
+
+--- baidu.com ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 10665ms
+rtt min/avg/max/mdev = 26.045/26.178/26.347/0.125 ms
+tao@S20:~/tao$ 
+tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29105342_b.zip -o 29105342_b_Package_USB.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 2803M  100 2803M    0     0   109M      0  0:00:25  0:00:25 --:--:--  111M
+```
+上面的`ping`延迟26ms，没有丢包；`curl`命令下载速度为：111MB/s
+现在运行脚本来对指定网卡 enp99s0 的流量进行限制：速率为300KB/s, 延迟为：200ms, 丢包率为：20%
+```
+tao@S20:~/tao$ sudo sh test.sh --devices enp99s0 --delay 200 --rate 300 --loss 20
+[INFO] >>> devices: 'enp99s0'
+[INFO] >>> delay: '200ms'
+[INFO] >>> loss: '20%'
+[INFO] >>> rate: '300kbps'
+[INFO] >>> addr: 'all'
+[INFO] >>> Executing: traffic_control
+[INFO] >>> start to configure device 'enp99s0'
+[INFO] >>> device 'enp99s0' configure complete
+[INFO] >>> all devices are configured and ready for testing
+tao@S20:~/tao$ 
+```
+再次用`ping`和`curl`进行测试，可以看到速率、丢包率和延迟都达到目标:
+```
+tao@S20:~/tao$ ping baidu.com
+PING baidu.com (110.242.68.66) 56(84) bytes of data.
+64 bytes from 110.242.68.66 (110.242.68.66): icmp_seq=1 ttl=49 time=230 ms
+64 bytes from 110.242.68.66 (110.242.68.66): icmp_seq=3 ttl=49 time=230 ms
+64 bytes from 110.242.68.66 (110.242.68.66): icmp_seq=5 ttl=49 time=230 ms
+64 bytes from 110.242.68.66 (110.242.68.66): icmp_seq=6 ttl=49 time=230 ms
+64 bytes from 110.242.68.66 (110.242.68.66): icmp_seq=8 ttl=49 time=230 ms
+64 bytes from 110.242.68.66 (110.242.68.66): icmp_seq=9 ttl=49 time=230 ms
+64 bytes from 110.242.68.66: icmp_seq=10 ttl=49 time=230 ms
+^C64 bytes from 110.242.68.66: icmp_seq=11 ttl=49 time=230 ms
+
+--- baidu.com ping statistics ---
+11 packets transmitted, 8 received, 27.2727% packet loss, time 23961ms
+rtt min/avg/max/mdev = 229.778/229.910/230.175/0.138 ms
+tao@S20:~/tao$ 
+tao@S20:~/tao$ curl -u 'ota_test:ota_test@666' -X GET http://10.138.36.58:9993/OTA_other/temp/29105342_b_Package_USB.zip -o 29105342_b_Package_USB.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0 2803M    0 7887k    0     0   285k      0  2:47:29  0:00:27  2:47:02  303k^C
+tao@S20:~/tao$ 
+```
+清除流量控制设置：
+```
+tao@S20:~/tao$ sudo sh test.sh --devices enp99s0 --clean
+[INFO] >>> devices: 'enp99s0'
+[INFO] >>> cleanup traffic control setting...
+[INFO] >>> device 'enp99s0' traffic control config removed
+[INFO] >>> cleanup done
+tao@S20:~/tao$ 
+```
 
 ## 脚本
 sh脚本如下：
