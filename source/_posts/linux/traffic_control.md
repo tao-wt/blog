@@ -47,6 +47,7 @@ tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 2803M  100 2803M    0     0   109M      0  0:00:25  0:00:25 --:--:--  111M
+tao@S20:~/tao$ 
 ```
 上面的`ping`延迟26ms，没有丢包；`curl`命令下载速度为：111MB/s
 现在运行脚本来对指定网卡 enp99s0 的流量进行限制：速率为300KB/s, 延迟为：200ms, 丢包率为：20%
