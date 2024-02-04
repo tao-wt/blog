@@ -43,7 +43,7 @@ PING baidu.com (39.156.66.10) 56(84) bytes of data.
 4 packets transmitted, 4 received, 0% packet loss, time 10665ms
 rtt min/avg/max/mdev = 26.045/26.178/26.347/0.125 ms
 tao@S20:~/tao$ 
-tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29105342_b.zip -o 29105342_b_Package_USB.zip
+tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29105342_b.zip -o 29105342.zip
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 2803M  100 2803M    0     0   109M      0  0:00:25  0:00:25 --:--:--  111M
@@ -80,7 +80,7 @@ PING baidu.com (110.242.68.66) 56(84) bytes of data.
 11 packets transmitted, 8 received, 27.2727% packet loss, time 23961ms
 rtt min/avg/max/mdev = 229.778/229.910/230.175/0.138 ms
 tao@S20:~/tao$ 
-tao@S20:~/tao$ curl -u 'ota_test:ota_test@666' -X GET http://10.138.36.58:9993/OTA_other/temp/29105342_b_Package_USB.zip -o 29105342_b_Package_USB.zip
+tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29105342_b.zip -o 29105342.zip
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0 2803M    0 7887k    0     0   285k      0  2:47:29  0:00:27  2:47:02  303k^C
