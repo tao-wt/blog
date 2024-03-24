@@ -30,7 +30,10 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
 > By default, Python uses the system CA certificates. In rare cases, these may not be installed or Python is unable to find them, resulting in a error like ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 
 解决办法：
-1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting `ssl` to `False`: `r = await session.get('https://example.com', ssl=False)` 或者在session层面禁用ssl校验`ClientSession(connector=TCPConnector(ssl=False))`
+1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting `ssl` to `False`:
+    `r = await session.get('https://example.com', ssl=False)` 
+    或者在session层面禁用ssl校验:
+    `ClientSession(connector=TCPConnector(ssl=False))`
 2. to work around this problem is to use the **certifi** package:
     ```python
     ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -60,7 +63,7 @@ Server Hello的报文结构如下：
 ![https2](/img/https2.png)
 各字段含义如下：
 - `Random`串：服务端生成的随机数，在生成对称密钥时会用
-- `Cipher Suites`：服务端选择的加密密码套件，```Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)```
+- `Cipher Suites`：服务端选择的加密密码套件，`TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`
     - `TLS`：`Transport Layer Security`, 指使用的协议是TLS
     - `ECDHE`：表示椭圆曲线Diffie-Hellman密钥交换（Elliptic Curve Diffie-Hellman Ephemeral）算法，用于在客户端和服务器之间安全地交换密钥。它允许双方在不共享任何秘密的情况下协商出一个共享的密钥。Ephemeral: 短暂的。
     - `RSA`：一种非对称加密算法，表示使用RSA算法进行身份验证和签名。在TLS握手过程中，服务器会提供一个RSA公钥证书，客户端验证这个证书以确认服务器的身份。
@@ -104,13 +107,13 @@ Linux系统已安装的证书在`/etc/ssl/certs`目录下，可以用`update-ca-
 > 服务器的`SSL证书`（通常称为服务器证书或TLS证书）是由CA签发给特定服务器的证书。它包含了服务器的公钥信息，以及关于服务器身份的其他数据（如域名、组织信息等）。
 > 当客户端（如浏览器）与服务器建立HTTPS连接时，服务器会将其`SSL证书`发送给客户端。客户端使用其信任的`CA证书`来验证服务器证书的有效性，从而确保与服务器之间的通信是加密和安全的。
 
-## Client Key Exchange、Change Cipher Spec、Encrypted Handshake Message
+## Client Finish
 ![https7](/img/https7.png)
 `Client Key Exchange`：用于发送`预主密钥`（Pre-Master Secret）给服务器(使用服务器公钥加密，这样确保了只有服务器能够知道预主密钥)。`预主密钥`是一个随机生成的密钥，用于和服务器共同计算出`会话密钥`（Session Key, 对称的）,用于后续的加密通信
 `Client Cipher Spec`：一个简单的通知，告诉通信的另一方接下来的数据将使用新的加密算法和会话密钥（使用两个随机数以及第三个`Pre-master key/secret`随机数一起算出的`对称密钥` session key/secret）进行加密
 `encrypted handshake message`：包含了之前握手过程中所有重要信息的加密版本，此报文是为了在正式传输数据之前对刚刚握手建立起来的加解密通道进行验证
 
-## New Session Ticket、Change Cipher Spec、Encrypted Handshake Message
+## Server Finish
 服务端对客户端发送过来的报文使用服务端私钥进行解密校验,提取出`预主密钥`，并生成相同的`对称密钥`
 ![https8](/img/https8.png)
 `New Session Ticket`: 服务器发送一个新的会话票据`Session Ticket`给客户端，以便客户端可以在将来的连接中重用会话状态(主密钥、证书信息等)，从而避免完整的握手过程。
