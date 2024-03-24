@@ -30,7 +30,7 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
 > By default, Python uses the system CA certificates. In rare cases, these may not be installed or Python is unable to find them, resulting in a error like ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 
 解决办法：
-1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting ssl to False: `r = await session.get('https://example.com', ssl=False)` 或者在session层面禁用ssl校验`ClientSession(connector=TCPConnector(ssl=False))`
+1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting `ssl` to `False`: `r = await session.get('https://example.com', ssl=False)` 或者在session层面禁用ssl校验`ClientSession(connector=TCPConnector(ssl=False))`
 2. to work around this problem is to use the **certifi** package:
     ```python
     ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -61,14 +61,14 @@ Server Hello的报文结构如下：
 各字段含义如下：
 - `Random`串：服务端生成的随机数，在生成对称密钥时会用
 - `Cipher Suites`：服务端选择的加密密码套件，```Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)```
-    `TLS`：指使用的协议是TLS
-    `ECDHE`：密钥交换算法, ECDHE（Elliptic Curve Diffie-Hellman Ephemeral）是基于椭圆曲线密码学的Diffie-Hellman密钥交换协议的变体。它允许双方在不共享任何秘密的情况下协商出一个共享的密钥。Ephemeral: 短暂的。使用`Diffie Hellman`算法进行TLS密钥交换具有优势：客户端和服务器都为每个新会话生成一个新密钥对。一旦计算出`预主密钥`，将立即删除客户端和服务器的私钥。这意味着私钥永远不会被窃取，确保完美的前向保密。
-    `RSA`：一种非对称加密算法，用于在TLS握手阶段交换密钥和其他参数。RSA在这里被用来进行服务器的身份验证。
-    `AES_256_GCM`：这是对称加密算法的组合。AES（Advanced Encryption Standard）指对称加密算法，GCM（Galois/Counter Mode）AES的一种工作模式，它提供了数据认证和加密的功能。这里的“256”指的是AES使用的密钥长度，256位通常被认为是相当安全的。
-    `SHA384`：这是一个消息认证码（MAC）算法，用于确保数据的完整性和真实性。
+    - `TLS`：`Transport Layer Security`, 指使用的协议是TLS
+    - `ECDHE`：表示椭圆曲线Diffie-Hellman密钥交换（Elliptic Curve Diffie-Hellman Ephemeral）算法，用于在客户端和服务器之间安全地交换密钥。它允许双方在不共享任何秘密的情况下协商出一个共享的密钥。Ephemeral: 短暂的。
+    - `RSA`：一种非对称加密算法，表示使用RSA算法进行身份验证和签名。在TLS握手过程中，服务器会提供一个RSA公钥证书，客户端验证这个证书以确认服务器的身份。
+    - `AES_256_GCM`：这是对称加密算法的组合。AES（Advanced Encryption Standard）指对称加密算法，GCM（Galois/Counter Mode）AES的一种工作模式，它提供了数据认证和加密的功能。这里的“256”指的是AES使用的密钥长度，256位通常被认为是相当安全的。
+    - `SHA384`：这是一个消息认证码（MAC）算法，用于确保数据的完整性和真实性。
 
-- `Certificate`：服务端证书，包含两个证书
-    返回多个证书，这通常是因为服务器返回的证书链中包含多个证书。在HTTPS通信中，服务器会发送自己的证书给客户端，以便客户端验证服务器的身份。这个证书可能是由一个根证书颁发机构（CA）直接签发的，也可能是由一个或多个中间CA签发的。在这种情况下，服务器会发送一个证书链，包括服务器的证书以及所有必要的中间证书，最终可以追溯到根证书。
+- `Certificate`：服务端证书，包含两个证书, 因为服务器返回的证书链中包含多个证书。
+    在HTTPS通信中，服务器会发送自己的证书给客户端，以便客户端验证服务器的身份。这个证书可能是由一个根证书颁发机构（CA）直接签发的，也可能是由一个或多个中间CA签发的。在这种情况下，服务器会发送一个证书链，包括服务器的证书以及所有必要的中间证书，最终可以追溯到根证书。
     分别导出上面两个证书到`.der`文件，进行查看：
     ![https3](/img/https3.png)
     ![https4](/img/https4.png)
