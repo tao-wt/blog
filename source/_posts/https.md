@@ -44,21 +44,21 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
     async with ClientSession(connector=TCPConnector(ssl=ssl_context)) as sess:
     ...
     ```
-    > **Certifi** provides Mozilla’s carefully curated collection of Root Certificates for validating the trustworthiness可信度 of SSL certificates while verifying the identity身份 of TLS hosts. It has been extracted提取 from the `Requests` project.
+    > **Certifi** provides Mozilla’s carefully curated精心策划的 collection of Root Certificates for validating the trustworthiness可信度 of SSL certificates while verifying the identity身份 of TLS hosts. It has been extracted提取 from the `Requests` project.
 
 由于解决上面上面的错误时，勾起了对https加密过程的好奇，所以就有了下面https的加密过程的分析。
 
 ## https请求整体流程
-下面截图是访问Bing时抓取的报文，后面对每条报文做单独分析
+下面截图是访问Bing时的报文交互过程，后面对每条报文做单独分析
 ![https0](/img/https0.png)
 
 ## Client Hello
-`TCP`连接建立后，客户端首先向服务器发送一个`Client Hello`消息，其中包含SSL协议版本, 随机字符串`Random`和客户端支持的加密算法列表`Cipher Suites`, 如下图：
+`TCP`连接建立后，客户端首先向服务器发送一个`Client Hello`消息，其中包含SSL协议版本, 随机数`Random`和客户端支持的加密算法列表`Cipher Suites`, 如下图：
 ![https1](/img/https1.png)
 各字段含义如下：
-- `Random`：随机数，在生成对称密钥时会用
-    > `Symmetric Encryption`: `对称加密`, 一种早期的加密技术: 在加密和解密过程中使用**同一密钥**。当发送者需要发送加密消息时，他们使用密钥来**加密**原始信息。接收者在收到加密消息后，须用同一密钥**解密**信息，获取原始的明文内容。对称加密因其高效性和易于实施而受到广泛的欢迎，但安全性相对较低，因为任何知道这个密钥的人都能解密被加密的信息。此外，密钥的管理和分发过程也存在潜在的危险。
-    > `Asymmetric Encryption`: `非对称加密`,又称公钥密码系统，它使用**一对密钥**，包括一个公钥和一个私钥。公钥用于加密信息，而私钥则用于解密信息。公钥可以公开给任何人，而私钥则必须妥善保管。只有拥有相应私钥的人才能解密用公钥加密的信息。这种加密方式的安全性依赖于某种计算的复杂性，因此安全性较高, 但速度相对较慢。
+- `Random`：随机数，在生成`对称密钥`时会用
+    > `Symmetric Encryption`: `对称加密`, 一种早期的加密技术: 在加密和解密过程中使用**同一密钥**。当发送者发送加密消息时，使用密钥来**加密**原始信息。接收者在收到加密消息后，须用同一密钥**解密**信息。对称加密因其高效性和易于实施而受到广泛的欢迎，但安全性相对较低，因为任何知道这个密钥的人都能解密被加密的信息。此外，密钥的管理和分发过程也存在潜在的危险。
+    > `Asymmetric Encryption`: `非对称加密`,又称公钥密码系统，它使用**一对密钥**，包括一个公钥和一个私钥。公钥用于加密信息，而私钥则用于解密信息。公钥可以公开给任何人，而私钥则必须妥善保管。拥有私钥的人才能解密用公钥加密的信息。这种加密方式的安全性依赖于某种计算的复杂性，因此安全性较高, 但速度相对较慢。
 - `Cipher Suites`：服务端会从此列表选择其支持的密码套件
 
 
