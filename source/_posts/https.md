@@ -20,7 +20,7 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
 [2024-03-22T07:22:00.550Z]       |   File "C:\Users\tao\jenkins\venv\Lib\site-packages\aiohttp\connector.py", line 1204, in _create_direct_connection
 [2024-03-22T07:22:00.550Z]       |     transp, proto = await self._wrap_create_connection(
 [2024-03-22T07:22:00.550Z]       |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[2024-03-22T07:22:00.550Z]       |   File "C:\Users\zetaoekr\jenkins\venv\Lib\site-packages\aiohttp\connector.py", line 994, in _wrap_create_connection
+[2024-03-22T07:22:00.550Z]       |   File "C:\Users\tao\jenkins\venv\Lib\site-packages\aiohttp\connector.py", line 994, in _wrap_create_connection
 [2024-03-22T07:22:00.550Z]       |     raise ClientConnectorCertificateError(req.connection_key, exc) from exc
 [2024-03-22T07:22:00.550Z]       | aiohttp.client_exceptions.ClientConnectorCertificateError: Cannot connect to host oss.obsv3.mo-jkr-1.tao.com:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')]
 [2024-03-22T07:22:00.550Z]       +------------------------------------
@@ -31,9 +31,9 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
 
 解决办法：
 1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting `ssl` to `False`:
-    `r = await session.get('https://example.com', ssl=False)` 
+    ```r = await session.get('https://example.com', ssl=False)```
     或者在session层面禁用ssl校验:
-    `ClientSession(connector=TCPConnector(ssl=False))`
+    ```ClientSession(connector=TCPConnector(ssl=False))```
 2. to work around this problem is to use the **certifi** package:
     ```python
     ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -42,7 +42,7 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
     ```
     > **Certifi** provides Mozilla’s carefully curated collection of Root Certificates for validating the trustworthiness可信度 of SSL certificates while verifying the identity身份 of TLS hosts. It has been extracted提取 from the `Requests` project.
 
-由于解决上面上面的错误时，勾起了对https加密过程的好奇，所以让我们开始一步一步剖析https的加密过程。
+由于解决上面上面的错误时，勾起了对https加密过程的好奇，所以就有了下面https的加密过程的分析。
 
 ## https请求整体流程
 下面截图是访问Bing时抓取的报文，后面对每条报文做单独分析
