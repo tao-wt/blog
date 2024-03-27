@@ -29,7 +29,7 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
 从报错看是因为不能获取本地的CA证书导致的。查看[官方文档](https://docs.aiohttp.org/en/stable/client_advanced.html#example-verify-certificate-fingerprint "aiohttp")有这样的描述：
 > By default, Python uses the system CA certificates. In rare cases, these may not be installed or Python is unable to find them, resulting in a error like ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate
 
-解决办法：
+### 解决办法：
 1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting `ssl` to `False`:
     ```python
     r = await session.get('https://example.com', ssl=False)
@@ -97,7 +97,7 @@ Server Hello的报文结构如下：
     >
     > 接收者收到消息和数字签名后，使用发送者的公钥对数字签名进行解密，然后重新计算消息的哈希值，并与解密得到的哈希值进行比较。如果两者相同，那么接收者就可以确认消息是由持有相应私钥的发送者发送的，并且消息在传输过程中没有被篡改。
     >
-    > 这个过程并不涉及公钥对私钥加密信息的解密，而是**公钥对数字签名的验证**。**私钥加密的信息只能用私钥解密**。
+    > 这个过程并不涉及公钥对私钥加密信息的解密，而是**公钥对数字签名的验证**。**私钥加密的信息只能用私钥解密**。非对称加密。
 
 3. 如果使用CA公钥解密和验证的过程成功，浏览器就会信任这个服务器证书，并认为与该服务器的通信是安全的。
 4. 浏览器会检查证书吊销列表，确保该证书没有被证书颁发机构吊销。
