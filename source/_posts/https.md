@@ -31,10 +31,14 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
 
 解决办法：
 1. 禁用SSL证书校验，官方说明如下：By default aiohttp uses strict checks for HTTPS protocol. Certification checks can be relaxed by setting `ssl` to `False`:
-    ```r = await session.get('https://example.com', ssl=False)```
+    ```python
+    r = await session.get('https://example.com', ssl=False)
+    ```
     或者在session层面禁用ssl校验:
-    ```ClientSession(connector=TCPConnector(ssl=False))```
-2. to work around this problem is to use the **certifi** package:
+    ```
+     ClientSession(connector=TCPConnector(ssl=False))
+    ```
+3. to work around this problem is to use the **certifi** package:
     ```python
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     async with ClientSession(connector=TCPConnector(ssl=ssl_context)) as sess:
