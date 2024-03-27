@@ -46,7 +46,7 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
     ```
     > **Certifi** provides Mozilla’s carefully curated精心策划的 collection of Root Certificates for validating the trustworthiness可信度 of SSL certificates while verifying the identity身份 of TLS hosts. It has been extracted提取 from the `Requests` project.
 
-由于解决上面上面的错误时，勾起了对https加密过程的好奇，所以就有了下面https的加密过程的分析。
+由于解决上面上面的错误时，勾起了对https加密过程的好奇，所以就有了下面https(TLSv1.2)的加密过程的分析。
 
 ## https请求整体流程
 下面截图是访问Bing时的报文交互过程，后面对每条报文做单独分析
@@ -129,3 +129,8 @@ Linux系统已安装的证书在`/etc/ssl/certs`目录下，可以用`update-ca-
 **Change Cipher Spec**: 用于告知通信的另一方，随后的报文将使用之前协商好的加密规范（Cipher Spec）进行加密, 标志着加密通信的开始
 
 **Encrypted Handshake Message**: 目的是验证之前协商的加密参数（如密钥）的正确性。如果双方能够成功解密并验证这个报文，那说明握手过程中协商的加密参数是正确的。
+
+## 解密https报文
+经过上面的分析，要解密https报文得先获得`预主密钥`, 但是有抓取的`Client Key Exchange`报文并不能获取`预主密钥`, 因为用公钥加密的`预主密钥`只能用对应的私钥来解密; 所以要解密https报文只能在客户端(如，浏览器)生成`预主密钥`时将其保存，然后再用协商好的信息生成`会话密钥`......
+
+新版的Wirshark提供了更方便的方法来解密https报文：
