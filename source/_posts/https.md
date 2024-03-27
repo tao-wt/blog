@@ -1,5 +1,5 @@
 ---
-title: https的校验和加密过程
+title: https的证书校验和数据加密过程
 date: 2024-3-23 20:20:52
 index_img: /img/index-8.jpg
 tags:
