@@ -67,10 +67,10 @@ Server Hello的报文结构如下：
 ![https2](/img/https2.png)
 各字段含义如下：
 - `Random`串：服务端生成的随机数，在生成对称密钥时会用
-- `Cipher Suites`：服务端选择的加密密码套件，`TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`
+- `Cipher Suites`：服务端选择的密码套件，`TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`
     - `TLS`：`Transport Layer Security`, 指使用的协议是TLS
-    - `ECDHE`：表示椭圆曲线Diffie-Hellman密钥交换（Elliptic Curve Diffie-Hellman Ephemeral）算法，用于在客户端和服务器之间安全地交换密钥。它允许双方在不共享任何秘密的情况下协商出一个共享的密钥。Ephemeral: 短暂的。
-    - `RSA`：一种非对称加密算法，表示使用RSA算法进行身份验证和签名。在TLS握手过程中，服务器会提供一个RSA公钥证书，客户端验证这个证书以确认服务器的身份。
+    - `ECDHE`：表示椭圆曲线Diffie-Hellman密钥交换（Elliptic Curve Diffie-Hellman Ephemeral）算法，它允许双方在不共享任何秘密的情况下协商出一个共享的对称密钥。Ephemeral: 短暂的。
+    - `RSA`：一种`非对称加密`算法，表示使用RSA算法进行身份验证和签名。在TLS握手过程中，服务器会提供一个RSA公钥证书，客户端验证这个证书以确认服务器的身份。
     - `AES_256_GCM`：这是对称加密算法的组合。AES（Advanced Encryption Standard）指对称加密算法，GCM（Galois/Counter Mode）AES的一种工作模式，它提供了数据认证和加密的功能。这里的“256”指的是AES使用的密钥长度，256位通常被认为是相当安全的。
     - `SHA384`：这是一个消息认证码（MAC）算法，用于确保数据的完整性和真实性。
 
