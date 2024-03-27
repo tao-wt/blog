@@ -76,8 +76,10 @@ Server Hello的报文结构如下：
 
 - `Certificate`：服务端证书，包含两个证书, 因为服务器返回的证书链中包含多个证书。
     这个阶段，服务器会发送自己的证书给客户端，以便客户端验证服务器的身份。这个证书可能是由一个根证书颁发机构（CA）直接签发的，也可能是由一个或多个中间CA签发的。
-    可以导出上面两个证书到`.der`文件(右击，导出分组字节流)，然后查看der证书信息(下图分别是windows和linux环境)：
-    ![https3](/img/https3.png) ![https4](/img/https4.png)
+
+    可以导出上面两个证书到`.der`文件(右击，*导出分组字节流*)，查看证书信息(windows可以直接查看，linux需要先转成`.pem`文件)：
+    ![https3](/img/https3.png)
+    ![https4](/img/https4.png)
 
 > `PDU`: 协议数据单元，是网络中不同层之间传递的信息单元。
 > `TCP segment of a reassembled PDU`：意味着这条TCP数据包是一个重新组装的数据包单元（PDU）的一部分。`TCP`是一种面向流的协议，它并不保证每次发送或接收的数据包都严格对应应用层发送或接收的消息。数据包在传输过程中可能会被分割成多个较小的片段，多个较小的数据包也可能会在接收端被重新组合(reassembled)成一个较大的数据流。
@@ -138,7 +140,8 @@ Linux系统已安装的证书在`/etc/ssl/certs`目录下，可以用`update-ca-
 经过上面的分析，要解密https报文得先获得`预主密钥`, 但是有抓取的`Client Key Exchange`报文并不能获取`预主密钥`, 因为用公钥加密的`预主密钥`只能用对应的私钥来解密; 所以要解密https报文只能在客户端(如，浏览器)生成`预主密钥`时将其保存，然后再用协商好的信息生成`会话密钥`......
 
 ### Wireshark 设置
-新版的Wirshark提供了更方便的方法来解密https报文, 如下图：
-![wireshark_tls1](/img/wireshark_tls1.png) ![wireshark_tls1](/img/wireshark_tls1.png)
-现在抓取到的报文已经自动解密了，可以看到必应用的是**HTTP2**：
+新版的Wirshark提供了更方便的方法来解密https报文, 配置步骤如下：
+![wireshark_tls1](/img/wireshark_tls1.png)
+![wireshark_tls2](/img/wireshark_tls2.png)
+看，现在抓取到的报文已经自动解密了，可以看到必应用的竟是**HTTP2**：
 ![wireshark_tls3](/img/wireshark_tls3.png)
