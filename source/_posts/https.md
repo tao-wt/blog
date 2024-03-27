@@ -35,7 +35,7 @@ excerpt: 通过分析wireshark抓取的报文，来理解https的校验和加密
     r = await session.get('https://example.com', ssl=False)
     ```
     或者在session层面禁用ssl校验:
-    ```
+    ```python
      ClientSession(connector=TCPConnector(ssl=False))
     ```
 3. to work around this problem is to use the **certifi** package:
@@ -110,19 +110,18 @@ Server Hello的报文结构如下：
 Linux系统已安装的证书在`/etc/ssl/certs`目录下，可以用`update-ca-certificates`来更新证书：
 ![https6](/img/https6.png)
 
-> `CA证书`（Certificate Authority Certificate）是由受信任的证书颁发机构（CA）签发的证书，用于证明该CA的**身份**和**公钥**。`CA证书`是公钥基础设施（PKI）的核心组成部分，它允许其他实体（如服务器或客户端）验证由该CA签发的其他证书的有效性。
-> 服务器的`SSL证书`（通常称为服务器证书或TLS证书）是由CA签发给特定服务器的证书。它包含了服务器的公钥信息，以及关于服务器身份的其他数据（如域名、组织信息等）。
-> 当客户端（如浏览器）与服务器建立HTTPS连接时，服务器会将其`SSL证书`发送给客户端。客户端使用其信任的`CA证书`来验证服务器证书的有效性，从而确保与服务器之间的通信是加密和安全的。
+> `CA证书`（Certificate Authority Certificate）: 是由受信任的证书颁发机构（CA）签发的证书，用于证明该CA的**身份**和**公钥**。`CA证书`是公钥基础设施（PKI）的核心组成部分，它允许其他实体（如服务器或客户端）验证由该CA签发的其他证书的有效性。
 
 ## Client Finish
 ![https7](/img/https7.png)
-`Client Key Exchange`：用于发送`预主密钥`（Pre-Master Secret）给服务器(使用服务器公钥加密，这样确保了只有服务器能够知道预主密钥)。`预主密钥`是一个随机生成的密钥，用于和服务器共同计算出`会话密钥`（Session Key, 对称的）,用于后续的加密通信
-`Client Cipher Spec`：一个简单的通知，告诉通信的另一方接下来的数据将使用新的加密算法和会话密钥（使用两个随机数以及第三个`Pre-master key/secret`随机数一起算出的`对称密钥` session key/secret）进行加密
-`encrypted handshake message`：包含了之前握手过程中所有重要信息的加密版本，此报文是为了在正式传输数据之前对刚刚握手建立起来的加解密通道进行验证
+**Client Key Exchange**：发送`预主密钥`（Pre-Master Secret）给服务器(用服务器公钥加密，确保只有服务器知道预主密钥)。`预主密钥`是一个随机生成的密钥，用于和服务器共同计算出`会话密钥`（Session Key, 对称的）,用于后续的加密通信
+**Client Cipher Spec**：一个简单的通知，告诉通信的另一方接下来的数据将使用新的加密算法和会话密钥（使用两个随机数以及第三个`Pre-master key/secret`随机数一起算出的`对称密钥` session key/secret）进行加密
+**encrypted handshake message**：包含了之前握手过程中所有重要信息的加密版本，这是为了在正式传输数据之前对刚握手建立起来的加解密通道进行验证
 
 ## Server Finish
 服务端对客户端发送过来的报文使用服务端私钥进行解密校验,提取出`预主密钥`，并生成相同的`对称密钥`
 ![https8](/img/https8.png)
-`New Session Ticket`: 服务器发送一个新的会话票据`Session Ticket`给客户端，以便客户端可以在将来的连接中重用会话状态(主密钥、证书信息等)，从而避免完整的握手过程。
-`Change Cipher Spec`: 用于告知通信的另一方，随后的报文将使用之前协商好的加密规范（Cipher Spec）进行加密, 标志着加密通信的开始
-`Encrypted Handshake Message`: 主要目的是验证之前协商的加密参数（如密钥）的正确性。如果双方能够成功解密并验证这个报文，那么说明握手过程中协商的加密参数是正确的。
+**New Session Ticket**: 服务器发送一个新的会话票据`Session Ticket`给客户端，以便客户端可以在将来的连接中重用会话状态，从而避免完整的握手过程。
+> 客户端利用New Session Ticket恢复加密连接时，`会话密钥`通常不会变化。
+**Change Cipher Spec**: 用于告知通信的另一方，随后的报文将使用之前协商好的加密规范（Cipher Spec）进行加密, 标志着加密通信的开始
+**Encrypted Handshake Message**: 目的是验证之前协商的加密参数（如密钥）的正确性。如果双方能够成功解密并验证这个报文，那说明握手过程中协商的加密参数是正确的。
