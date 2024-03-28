@@ -10,7 +10,10 @@ author: tao-wt@qq.com
 excerpt: 本文描述了在不正确使用multiprocessing模块的Queue和Pipe时，导致程序在退出时卡住的两种情况
 ---
 ## 使用管道时
-原理：创建管道`conn1, conn2 = multiprocessing.Pipe()`，调用`conn1`和`conn2`的`recv()`或`recv_bytes()`方法时，如果对端已关闭**且**不存在数据项则会引发`EOFError`异常。所以，多进程环境中如果生产者/消费者没有/不再使用管道的某个端点就应该将其关闭，以防止程序在管道的`recv()`/`recv_bytes()`方法上挂起。
+```python
+conn1, conn2 = multiprocessing.Pipe()
+```
+原理：创建管道，调用`conn1`和`conn2`的`recv()`或`recv_bytes()`方法时，如果对端已关闭**且**不存在数据项则会引发`EOFError`异常。所以，多进程环境中如果生产者/消费者没有/不再使用管道的某个端点就应该将其关闭，以防止程序在管道的`recv()`/`recv_bytes()`方法上挂起。
 > 管道是由操作系统进行引用计数的, 必须在所有进程中关闭管道才能生成`EOFError`异常！
 
 ### 问题复现
@@ -76,7 +79,8 @@ c1.send(123)
     ![pipe ok](/img/pipe_ok.png)
 
 ## 使用队列时
-原理：创建队列`queue = multiprocessing.Queue()`, 当队列使用完毕执行`queue.close()`关闭时，队列关闭不会在消费者中的`get()`方法上生成任何类型的信号或异常！
+```queue = multiprocessing.Queue()```
+原理：创建队列, 当队列使用完毕执行`queue.close()`关闭时，队列关闭不会在消费者中的`get()`方法上生成任何类型的信号或异常！
 
 ### 问题复现
 以下简单的代码展示了在**不使用哨兵**的情况下，程序在退出时卡住的现象：
