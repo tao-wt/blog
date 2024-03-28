@@ -122,7 +122,7 @@ Linux系统已安装的证书在`/etc/ssl/certs`目录下，可以用`update-ca-
 ![https7](/img/https7.png)
 **Client Key Exchange**：发送`预主密钥`（Pre-Master Secret）给服务器(用服务器公钥加密，确保只有服务器知道预主密钥)。`预主密钥`是一个随机生成的密钥，用于和服务器共同计算出`会话密钥`（Session Key, 对称的）,用于后续的加密通信
 
-**Client Cipher Spec**：一个简单的通知，告诉通信的另一方接下来的数据将使用新的加密算法和会话密钥（使用两个随机数以及第三个`Pre-master key/secret`随机数一起算出的`对称密钥` session key/secret）进行加密
+**Change Cipher Spec**：一个简单的通知，告诉通信的另一方接下来的数据将使用新的加密算法和会话密钥（使用两个随机数以及第三个`Pre-master key/secret`随机数一起算出的`对称密钥` session key/secret）进行加密
 
 **encrypted handshake message**：包含了之前握手过程中所有重要信息的加密版本，这是为了在正式传输数据之前对刚握手建立起来的加解密通道进行验证
 
