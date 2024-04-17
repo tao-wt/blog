@@ -21,7 +21,7 @@ excerpt: 利用python的asyncio模块来实现异步上传文件到华为对象�
 > 本模块暂不支持递归对目录下文件进行上传，需在调用代码实现目录文件的遍历
 > 本模块暂不支持断点续传上传
 
-### 使用
+## 模块使用
 1. 首先设置执行环境
     ```powershell
     PS D:\Code>
@@ -53,7 +53,7 @@ excerpt: 利用python的asyncio模块来实现异步上传文件到华为对象�
     >>>
     ```
 
-4. 上传大文件
+4. 上传大文件，会自动采用分段上传
     ```python
     >>>
     >>> large_fileurl = await async_obs.upload(obs, "d:\\pkg_test.7z", upload_to="/tao_test/pkg_test.7z")
@@ -91,6 +91,7 @@ excerpt: 利用python的asyncio模块来实现异步上传文件到华为对象�
 
 
 ## 脚本
+### logger模块
 logger模块如下：
 ```python
 import logging
@@ -147,7 +148,8 @@ def setup_logger(name="root", *, debug=False, handlers=list(),
 
 ```
 
-async_obs.py模块代码如下，运行前需要安装aiohttp, aiofiles模块：
+### async_obs模块
+async_obs.py代码如下，运行前需要安装aiohttp, aiofiles模块：
 ```python
 import os
 import base64
