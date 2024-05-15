@@ -13,21 +13,21 @@ categories:
 author: tao-wt@qq.com
 excerpt: 在分析K8s的网络的底层原理时，顺带将涉及到的 ipvlan 虚拟网卡技术也研究了下
 ---
-# 简介
+## 简介
 通过`ipvlan`，可以在一个父接口上创建出多个虚拟接口，这些虚拟接口的MAC地址和父接口的一样；虚拟网卡可以直接访问宿主机接口所连的物理网络，省去了Bridge的转发。以下是[官方介绍](https://www.kernel.org/doc/html/v5.8/networking/ipvlan.html#introduction "ipvlan.introduction")：
 > This is conceptually very similar to the macvlan driver with one major exception of using L3 for mux-ing /demux-ing among slaves. This property makes the master device share the L2 with it’s slave devices. I have developed this driver in conjunction with network namespaces and not sure if there is use case outside of it.
 
 ipvlan有三种操作模式：`L2`、`L3`和`L3s`，父网卡上创建ipvlan接口时，同一时刻只能选择其中一种模式；另外每种模式可以有三种`flags`选择：`bridge`、`private`和`vepa`；无论哪种模式哪种`flag`，`ipvlan`接口和父接口之间网络都不通，除非在父接口所在命名空间也创建一个`ipvlan`接口。本文只演示两种模式和bridge/vepa flag的情况。每种flag的介绍，请参考[官方文档](https://www.kernel.org/doc/html/v5.8/networking/ipvlan.html#mode-flags "ipvlan.flags")
 > IPvlan has two modes of operation - L2 and L3. For a given master device, you can select one of these two modes and all slaves on that master will operate in the same (selected) mode. The RX mode is almost identical except that in L3 mode the slaves wont receive any multicast / broadcast traffic. L3 mode is more restrictive since routing is controlled from the other (mostly) default namespace.
 
-# L2模式
+## L2模式
 在`L2`模式下，`ipvlan`接口组装好的报文直接通过父接口发送出去。另外，此模式下，`ipvlan`接口能收发组播和广播。
 > In this mode TX processing happens on the stack instance attached to the slave device and packets are switched and queued to the master device to send out. In this mode the slaves will RX/TX multicast and broadcast (if applicable) as well.
 
-## bridge
+### bridge
 > This is the default option. To configure the IPvlan port in this mode, user can choose to either add this option on the command-line or don’t specify anything. This is the traditional mode where slaves can cross-talk among themselves apart from talking through the master device.
 
-### 创建网络命名空间和ipvlan接口
+#### 创建网络命名空间和ipvlan接口
 分别创建两个网络命名空间和两个`ipvlan`接口，然后将ipvl1接口放入ns1中，ipvl2接口放入ns2中；父接口eno2的配置如下
 ```bash
 tao@S3:~$
@@ -89,7 +89,7 @@ root@S3:/home/tao# ip addr s
 root@S3:/home/tao#
 ```
 
-### 验证ipvlan接口间可以互通
+#### 验证ipvlan接口间可以互通
 在ns2中执行`ping 10.138.36.2`, 可以通。
 ```bash
 root@S3:/home/tao# arp -n
@@ -159,7 +159,7 @@ listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
 0 packets dropped by kernel
 tao@S20:~$
 ```
-### 测试ipvlan和外网通信
+#### 测试ipvlan和外网通信
 在ns2中`ping`同一网络中其它主机和`baidu.com`：
 ```bash
 root@S3:/home/tao# ping baidu.com
@@ -229,10 +229,10 @@ From 10.138.36.2 icmp_seq=1 Destination Host Unreachable
 root@S3:/home/tao#
 ```
 
-## vepa
+### vepa
 > If this is added to the command-line, the port is set in VEPA mode. i.e. port will offload switching functionality to the external entity as described in 802.1Qbg Note: VEPA mode in IPvlan has limitations. IPvlan uses the mac-address of the master-device, so the packets which are emitted in this mode for the adjacent neighbor will have source and destination mac same. This will make the switch / router send the redirect message.
 
-### 创建ipvlan接口和命名空间
+#### 创建ipvlan接口和命名空间
 `ipvlan`接口和父接口设置不通子网的ip(父接口是：10.138.36.0/23, ipvlan接口：192.168.9.0/24)。
 36.58主机上的设置如下：
 ```bash
@@ -258,7 +258,7 @@ tao@S3:~$
 ```
 **注意**：设置网关时报错，下一跳必须在同一网络中！
 
-### 验证同一父接口上ipvlan接口的连通性
+#### 验证同一父接口上ipvlan接口的连通性
 在没有外部交换机/路由器的情况下，在ns2中`ping`ns1，不通：
 ```bash
 root@S3:/home/tao# ping 192.168.9.2 -c 1
@@ -386,7 +386,7 @@ listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
 tao@S20:~$
 ```
 
-### 测试ipvlan接口和其它主机的连通性
+#### 测试ipvlan接口和其它主机的连通性
 在ns2中`ping 10.138.36.66`, 通：
 ```bash
 root@S3:/home/tao# ping 10.138.36.66 -c 1
@@ -464,12 +464,12 @@ listening on ipvl2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 root@S3:/home/tao#
 ```
 
-# L3模式
+## L3模式
 在`L3`模式下，`ipvlan`接口报文链路层的处理是在父接口对应网络协议栈上，并且会经过一次父接口网络栈的路由；另外，`L3`模式下，`ipvlan`接口不能收发多播和广播报文。
 > In this mode TX processing up to L3 happens on the stack instance attached to the slave device and packets are switched to the stack instance of the master device for the L2 processing and routing from that instance will be used before packets are queued on the outbound device. In this mode the slaves will not receive nor can send multicast / broadcast traffic.
 
-## bridge
-### 创建ipvlan接口和相应网络命名空间
+### bridge
+#### 创建ipvlan接口和相应网络命名空间
 整体配置和上面`L2`模式类似：
 ```bash
 tao@S3:~$ sudo ip netns add ns1
@@ -491,7 +491,7 @@ tao@S3:~$ sudo ip netns exec ns2 ip r add default dev ipvl2
 tao@S3:~$
 ```
 
-### 检验ipvlan接口之间的连通性
+#### 检验ipvlan接口之间的连通性
 在ns2中`ping 192.168.9.2`, 可以通。注意ipvl2接口的状态字段: `NOARP`。
 ```bash
 root@S3:/home/tao# ip a s ipvl2
@@ -538,7 +538,7 @@ listening on ipvl1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 root@S3:/home/tao# 
 ```
 
-### ipvlan接口和外部主机的通信
+#### ipvlan接口和外部主机的通信
 在ns2中`ping 10.138.36.66`，36.66和父接口处于同一网络，但和`ipvlan`接口不是同一子网，所以正常情况下是不通的:
 ```bash
 root@S3:/home/tao# ping 10.138.36.66 -c 1
@@ -630,8 +630,8 @@ rtt min/avg/max/mdev = 0.244/0.244/0.244/0.000 ms
 root@S3:/home/tao#
 ```
 
-## vepa
-### 创建ipvlan接口和相应网络命名空间
+### vepa
+#### 创建ipvlan接口和相应网络命名空间
 创建命名空间和`ipvlan`接口：
 ```bash
 tao@S3:~$ sudo ip netns add ns1
@@ -652,7 +652,7 @@ tao@S3:~$ sudo ip netns exec ns2 ip addr add 192.168.9.3/24 dev ipvl2
 tao@S3:~$ sudo ip netns exec ns2 ip r add default dev ipvl2
 tao@S3:~$
 ```
-### 验证ipvlan接口间的互通性
+#### 验证ipvlan接口间的互通性
 在ns2中`ping`ns1，在没有外部交换机或路由的情况下是`ping`不通的：
 ```bash
 root@S3:/home/tao# ping 192.168.9.2 -c1
@@ -767,7 +767,7 @@ listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
 0 packets dropped by kernel
 tao@S20:~$
 ```
-### 测试和同一网络内设备的连通性
+#### 测试和同一网络内设备的连通性
 在ns2中执行`ping 10.138.36.66`，通：
 ```bash
 root@S3:/home/tao# ping 10.138.36.66 -c1
@@ -830,7 +830,7 @@ tao@S20:~$ ip link show eno1
 tao@S20:~$
 ```
 
-### 测试和公网的连通性
+#### 测试和公网的连通性
 在ns2中执行`ping 39.156.66.10`，不通：
 ```bash
 root@S3:/home/tao# ping 39.156.66.10 -c1
