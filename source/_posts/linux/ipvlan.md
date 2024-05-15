@@ -29,7 +29,7 @@ ipvlan有三种操作模式：`L2`、`L3`和`L3s`，父网卡上创建ipvlan接�
 
 ### 创建网络命名空间和ipvlan接口
 分别创建两个网络命名空间和两个`ipvlan`接口，然后将ipvl1接口放入ns1中，ipvl2接口放入ns2中；父接口eno2的配置如下
-```bash
+```shell
 tao@S3:~$
 tao@S3:~$ sudo ip netns add ns1
 tao@S3:~$ sudo ip netns add ns2
@@ -49,7 +49,7 @@ tao@S3:~$
 ```
 
 ns1中的配置如下：
-```bash
+```shell
 root@S3:/home/tao# ip link
 1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
