@@ -150,7 +150,7 @@ root@S3:/home/tao#
 tao@S20:~$ sudo tcpdump -i eno1 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
-14:37:03.358028 f4:e9:75:75:60:01 > dd:6b:8c:84:b8:c4, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at f4:e9:75:75:60:01, length 46
+14:37:03.358028 ff:e9:75:75:60:01 > dd:6b:8c:84:b8:c4, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at ff:e9:75:75:60:01, length 46
 14:37:06.878972 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
 14:37:16.181444 bb:6b:8c:89:88:22 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.2 tell 10.138.36.3, length 46
 ^C
@@ -190,17 +190,17 @@ root@S3:/home/tao#
 tao@S3:~$ sudo tcpdump -i eno2 'icmp or arp or port 53' -e -n
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
-16:29:47.469463 f4:e9:75:75:60:01 > 84:a9:38:c6:7b:13, ethertype IPv4 (0x0800), length 90: 10.3.3.3.53 > 10.138.36.185.56550: 8323* 1/0/0 A 10.25.8.60 (48)
+16:29:47.469463 ff:e9:75:75:60:01 > 84:a9:38:c6:7b:13, ethertype IPv4 (0x0800), length 90: 10.3.3.3.53 > 10.138.36.185.56550: 8323* 1/0/0 A 10.25.8.60 (48)
 16:29:48.167129 bb:6b:8c:89:88:22 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.138.36.55 tell 10.138.36.3, length 28
 16:29:48.167335 bb:6b:8c:86:76:92 > bb:6b:8c:89:88:22, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
 16:29:48.167356 bb:6b:8c:89:88:22 > bb:6b:8c:86:76:92, ethertype IPv4 (0x0800), length 98: 10.138.36.3 > 10.138.36.55: ICMP echo request, id 21626, seq 1, length 64
 16:29:48.167878 bb:6b:8c:86:76:92 > bb:6b:8c:89:88:22, ethertype IPv4 (0x0800), length 98: 10.138.36.55 > 10.138.36.3: ICMP echo reply, id 21626, seq 1, length 64
-16:29:48.408284 f4:e9:75:75:60:01 > dd:6b:8c:84:b8:c4, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at f4:e9:75:75:60:01, length 46
+16:29:48.408284 ff:e9:75:75:60:01 > dd:6b:8c:84:b8:c4, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at ff:e9:75:75:60:01, length 46
 16:29:50.403471 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
 16:29:52.811073 bb:6b:8c:86:76:92 > bb:6b:8c:89:88:22, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.3 (bb:6b:8c:89:88:22) tell 10.138.36.55, length 46
 16:29:52.811087 bb:6b:8c:89:88:22 > bb:6b:8c:86:76:92, ethertype ARP (0x0806), length 42: Reply 10.138.36.3 is-at bb:6b:8c:89:88:22, length 28
-16:29:56.858903 bb:6b:8c:89:88:22 > f4:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.3 > 110.242.68.66: ICMP echo request, id 58111, seq 1, length 64
-16:29:56.883179 f4:e9:75:75:60:01 > bb:6b:8c:89:88:22, ethertype IPv4 (0x0800), length 98: 110.242.68.66 > 10.138.36.3: ICMP echo reply, id 58111, seq 1, length 64
+16:29:56.858903 bb:6b:8c:89:88:22 > ff:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.3 > 110.242.68.66: ICMP echo request, id 58111, seq 1, length 64
+16:29:56.883179 ff:e9:75:75:60:01 > bb:6b:8c:89:88:22, ethertype IPv4 (0x0800), length 98: 110.242.68.66 > 10.138.36.3: ICMP echo reply, id 58111, seq 1, length 64
 ^C
 28 packets captured
 29 packets received by filter
@@ -353,7 +353,7 @@ listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 12:09:56.245678 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.163 (dd:70:b8:09:81:39) tell 10.138.36.55, length 46
 12:10:10.462786 bb:6b:8c:89:88:22 > bb:6b:8c:89:88:22, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 192.168.9.2: ICMP echo request, id 62626, seq 1, length 64
 12:10:26.422511 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
-12:10:31.481387 f4:e9:75:75:60:01 > dd:6b:8c:89:87:d1, ethertype ARP (0x0806), length 60: Request who-has 10.138.37.1 (dd:6b:8c:89:87:d1) tell 10.138.36.1, length 46
+12:10:31.481387 ff:e9:75:75:60:01 > dd:6b:8c:89:87:d1, ethertype ARP (0x0806), length 60: Request who-has 10.138.37.1 (dd:6b:8c:89:87:d1) tell 10.138.36.1, length 46
 ^C
 4 packets captured
 4 packets received by filter
@@ -377,7 +377,7 @@ tao@S20:~$ sudo tcpdump -i eno1 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
 12:10:26.358807 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
-12:10:31.417668 f4:e9:75:75:60:01 > dd:6b:8c:89:87:d1, ethertype ARP (0x0806), length 60: Request who-has 10.138.37.1 (dd:6b:8c:89:87:d1) tell 10.138.36.1, length 46
+12:10:31.417668 ff:e9:75:75:60:01 > dd:6b:8c:89:87:d1, ethertype ARP (0x0806), length 60: Request who-has 10.138.37.1 (dd:6b:8c:89:87:d1) tell 10.138.36.1, length 46
 12:10:36.179203 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.163 (dd:70:b8:09:81:39) tell 10.138.36.55, length 46
 ^C
 7 packets captured
@@ -403,9 +403,9 @@ root@S3:/home/tao#
 root@S3:/home/tao# tcpdump -i ipvl1 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on ipvl1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
-^C13:11:46.209489 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
-13:11:48.207614 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
-13:11:49.209507 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+^C13:11:46.209489 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:48.207614 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:49.209507 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
 13:12:00.038607 bb:6b:8c:89:88:22 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.138.36.66 tell 192.168.9.3, length 28
 
 4 packets captured
@@ -418,11 +418,11 @@ root@S3:/home/tao#
 tao@S20:~$ sudo tcpdump -i eno1 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
-13:11:46.193683 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
-13:11:48.191807 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
-13:11:49.193668 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:46.193683 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:48.191807 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:49.193668 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
 13:11:54.910861 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
-13:11:59.416243 f4:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at f4:e9:75:75:60:01, length 46
+13:11:59.416243 ff:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at ff:e9:75:75:60:01, length 46
 13:12:00.022803 bb:6b:8c:89:88:22 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.66 tell 192.168.9.3, length 46
 13:12:00.022844 bb:6b:8c:86:6d:83 > bb:6b:8c:89:88:22, ethertype ARP (0x0806), length 42: Reply 10.138.36.66 is-at bb:6b:8c:86:6d:83, length 28
 13:12:00.022951 bb:6b:8c:89:88:22 > bb:6b:8c:86:6d:83, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 10.138.36.66: ICMP echo request, id 32399, seq 1, length 64
@@ -450,9 +450,9 @@ tao@S20:~$
 root@S3:/home/tao# tcpdump -i ipvl2 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on ipvl2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
-^C13:11:46.209494 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
-13:11:48.207619 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
-13:11:49.209512 f4:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+^C13:11:46.209494 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:48.207619 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
+13:11:49.209512 ff:e9:75:75:60:01 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.147 tell 10.138.36.1, length 46
 13:12:00.038424 bb:6b:8c:89:88:22 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.138.36.66 tell 192.168.9.3, length 28
 13:12:00.038758 bb:6b:8c:86:6d:83 > bb:6b:8c:89:88:22, ethertype ARP (0x0806), length 60: Reply 10.138.36.66 is-at bb:6b:8c:86:6d:83, length 46
 13:12:00.038778 bb:6b:8c:89:88:22 > bb:6b:8c:86:6d:83, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 10.138.36.66: ICMP echo request, id 32399, seq 1, length 64
@@ -517,7 +517,7 @@ tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 19:25:25.939953 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.163 (dd:70:b8:09:81:39) tell 10.138.36.55, length 46
 19:25:25.975000 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Reply 10.138.36.55 is-at bb:6b:8c:86:76:92, length 46
-19:25:29.387931 f4:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at f4:e9:75:75:60:01, length 46
+19:25:29.387931 ff:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at ff:e9:75:75:60:01, length 46
 ^C
 3 packets captured
 3 packets received by filter
@@ -584,7 +584,7 @@ listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
 19:42:41.020445 bb:6b:8c:89:88:22 > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.66 tell 10.138.36.58, length 46
 19:42:41.020483 bb:6b:8c:86:6d:83 > bb:6b:8c:89:88:22, ethertype ARP (0x0806), length 42: Reply 10.138.36.66 is-at bb:6b:8c:86:6d:83, length 28
 19:42:41.020571 bb:6b:8c:89:88:22 > bb:6b:8c:86:6d:83, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 10.138.36.66: ICMP echo request, id 2304, seq 1, length 64
-19:42:41.020620 bb:6b:8c:86:6d:83 > f4:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.66 > 192.168.9.3: ICMP echo reply, id 2304, seq 1, length 64
+19:42:41.020620 bb:6b:8c:86:6d:83 > ff:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.66 > 192.168.9.3: ICMP echo reply, id 2304, seq 1, length 64
 19:42:46.477106 bb:6b:8c:86:76:92 > dd:70:b8:09:81:39, ethertype ARP (0x0806), length 60: Request who-has 10.138.36.163 (dd:70:b8:09:81:39) tell 10.138.36.55, length 46
 ^C
 9 packets captured
@@ -596,7 +596,7 @@ default via 10.138.36.1 dev eno1 proto dhcp metric 100
 172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1
 tao@S20:~$ ip neigh
 10.138.36.2 dev eno1 lladdr bb:6b:8c:89:88:22 STALE
-10.138.36.1 dev eno1 lladdr f4:e9:75:75:60:01 REACHABLE
+10.138.36.1 dev eno1 lladdr ff:e9:75:75:60:01 REACHABLE
 fe80::18a3:398f:9a50:3d3a dev eno1 lladdr 68:da:73:aa:3d:90 STALE
 tao@S20:~$
 ```
@@ -680,8 +680,8 @@ root@S3:/home/tao#
 tao@S3:~$ sudo tcpdump -i eno2 'arp or icmp' -e -n
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
-15:20:29.368029 f4:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at f4:e9:75:75:60:01, length 46
-15:20:33.152287 bb:6b:8c:89:88:22 > f4:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 192.168.9.2: ICMP echo request, id 40524, seq 1, length 64
+15:20:29.368029 ff:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at ff:e9:75:75:60:01, length 46
+15:20:33.152287 bb:6b:8c:89:88:22 > ff:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 192.168.9.2: ICMP echo request, id 40524, seq 1, length 64
 ^C
 8 packets captured
 8 packets received by filter
@@ -689,7 +689,7 @@ listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 tao@S3:~$ arp -n
 Address                  HWtype  HWaddress           Flags Mask            Iface
 10.138.36.66             ether   bb:6b:8c:86:6d:83   C                     eno2
-10.138.36.1              ether   f4:e9:75:75:60:01   C                     eno2
+10.138.36.1              ether   ff:e9:75:75:60:01   C                     eno2
 tao@S3:~$ ip r
 default via 10.138.36.1 dev eno2 proto dhcp metric 100
 10.138.36.0/23 dev eno2 proto kernel scope link src 10.138.36.58 metric 100
@@ -847,8 +847,8 @@ tao@S3:~$ sudo tcpdump -i eno2 'arp or icmp' -e -n
 [sudo] password for tao:
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
-16:16:13.911247 bb:6b:8c:89:88:22 > f4:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 39.156.66.10: ICMP echo request, id 6307, seq 1, length 64
-16:16:29.355347 f4:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at f4:e9:75:75:60:01, length 46
+16:16:13.911247 bb:6b:8c:89:88:22 > ff:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 39.156.66.10: ICMP echo request, id 6307, seq 1, length 64
+16:16:29.355347 ff:e9:75:75:60:01 > bb:6b:8c:86:78:83, ethertype ARP (0x0806), length 60: Reply 10.138.36.1 is-at ff:e9:75:75:60:01, length 46
 ^C
 4 packets captured
 4 packets received by filter
@@ -909,8 +909,8 @@ tao@S20:~$ sudo tcpdump -i eno1 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eno1, link-type EN10MB (Ethernet), capture size 262144 bytes
 16:40:23.870620 bb:6b:8c:89:88:22 > bb:6b:8c:86:6d:83, ethertype IPv4 (0x0800), length 98: 192.168.9.3 > 39.156.66.10: ICMP echo request, id 22349, seq 1, length 64
-16:40:23.870683 bb:6b:8c:86:6d:83 > f4:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.66 > 39.156.66.10: ICMP echo request, id 22349, seq 1, length 64
-16:40:23.900931 f4:e9:75:75:60:01 > bb:6b:8c:86:6d:83, ethertype IPv4 (0x0800), length 98: 39.156.66.10 > 10.138.36.66: ICMP echo reply, id 22349, seq 1, length 64
+16:40:23.870683 bb:6b:8c:86:6d:83 > ff:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.66 > 39.156.66.10: ICMP echo request, id 22349, seq 1, length 64
+16:40:23.900931 ff:e9:75:75:60:01 > bb:6b:8c:86:6d:83, ethertype IPv4 (0x0800), length 98: 39.156.66.10 > 10.138.36.66: ICMP echo reply, id 22349, seq 1, length 64
 16:40:23.900980 bb:6b:8c:86:6d:83 > bb:6b:8c:89:88:22, ethertype IPv4 (0x0800), length 98: 39.156.66.10 > 192.168.9.3: ICMP echo reply, id 22349, seq 1, length 64
 ^C
 4 packets captured
@@ -932,7 +932,7 @@ listening on ipvl2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 root@S3:/home/tao#
 ```
 验证结束，清理防火墙规则：
-```
+```bash
 tao@S20:~$ sudo iptables -t nat -D PREROUTING 1
 tao@S20:~$ sudo iptables -t nat -D POSTROUTING 1
 tao@S20:~$ sudo iptables -t filter -D FORWARD 1
