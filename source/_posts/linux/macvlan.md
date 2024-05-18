@@ -1,7 +1,7 @@
 ---
 title: linux 虚拟网卡之 macvlan
 date: 2024-5-17 15:21:30
-index_img: /img/index-16.jpg
+index_img: /img/index-11.jpg
 tags:
   - linux
   - network
