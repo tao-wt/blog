@@ -749,8 +749,7 @@ root@S3:/home/tao#
 ```
 父接口上抓包：
 ```bash
-zeekr@SH-E3:~$ sudo tcpdump -i eno2 'icmp or arp' -e -n
-[sudo] password for zeekr:
+tao@S3:~$ sudo tcpdump -i eno2 'icmp or arp' -e -n
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 16:32:26.458315 d6:2b:b6:7a:33:4f > f4:e9:75:75:60:01, ethertype IPv4 (0x0800), length 98: 10.138.36.2 > 110.242.68.66: ICMP echo request, id 57597, seq 1, length 64
@@ -758,5 +757,5 @@ listening on eno2, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 2 packets captured
 2 packets received by filter
 0 packets dropped by kernel
-zeekr@SH-E3:~$
+tao@S3:~$
 ```
