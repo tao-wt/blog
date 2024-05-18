@@ -1,4 +1,4 @@
-"---
+---
 title: linux 虚拟网卡之 macvlan
 date: 2024-5-17 15:21:30
 index_img: /img/index-16.jpg
@@ -14,6 +14,7 @@ categories:
   - [linux, network, vlan]
   - [linux, network, bridge]
   - [linux, network, veth]
+  - [linux, network, iptables]
 author: tao-wt@qq.com
 excerpt: 由于上一篇对 ipvlan 的认识，这篇主要是研究和尝试另一种相似的虚拟网卡技术：macvlan 
 ---
