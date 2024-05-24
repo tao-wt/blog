@@ -15,11 +15,11 @@ excerpt: 最近测试团队提了一个弱网环境的测试需求，本文描�
 ---
 > `tc`命令的使用细节，可以参考脚本后面的内容，这些内容提取自`tc`命令的说明手册，侧重于从整体上说明`tc`命令的用法和脚本中所涉及的`qdisc`, `class`和`filter`的概念/描述；若要深入理解，可参考[tc-iproute2帮助手册](https://manpages.debian.org/unstable/iproute2/tc.8.en.html "帮助手册地址")。
 
-## 脚本使用
+## 脚本使用说明
 可以通过`--help`, `-h`参数来获取脚本帮助:
 ```
-tao@S20:~/tao$ sudo sh test.sh -h
----------test.sh usage:-------------
+tao@S20:~/tao$ sudo sh traffic_control.sh -h
+---------traffic_control.sh usage:-------------
 this script support follow paramters:
   --addr/-a: the ip address, separate by ','
   --clean/-c: boolean, remove the traffic control setting
@@ -30,7 +30,11 @@ this script support follow paramters:
 -------------------------------------------
 tao@S20:~/tao$ 
 ```
-这个流量控制脚本可以设置指定网卡(指定IP)的速率、延迟和丢包率。在进行流量控制之前，`ping`和`curl`命令的输出如下：
+此脚本默认是在接口(`--devices`参数，支持指定多个接口)层面对报文的速率、延迟和丢包率进行限制；当指定`ip`(`--addr`参数)时，只会对具体`ip`的流量进行限制，即不会在接口层面对整个流量进行限制。
+`--clean`或`-c`参数用来清除指定接口上的限制。
+
+### 示例
+在进行流量控制之前，`ping`和`curl`命令的输出如下：
 ```
 tao@S20:~/tao$ ping baidu.com
 PING baidu.com (39.156.66.10) 56(84) bytes of data.
@@ -49,10 +53,10 @@ tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29
 100 2803M  100 2803M    0     0   109M      0  0:00:25  0:00:25 --:--:--  111M
 tao@S20:~/tao$ 
 ```
-上面的`ping`延迟26ms，没有丢包；`curl`命令下载速度为：111MB/s
-现在运行脚本来对指定网卡 enp99s0 的流量进行限制：速率为300KB/s, 延迟为：200ms, 丢包率为：20%
+可以看到上面的`ping`的延迟为26ms，没有丢包；`curl`命令的下载速度为：111MB/s。
+现在运行脚本来对`enp99s0`接口的流量进行限制，设置速率为300KB/s、延迟为：200ms、丢包率为：20%
 ```
-tao@S20:~/tao$ sudo sh test.sh --devices enp99s0 --delay 200 --rate 300 --loss 20
+tao@S20:~/tao$ sudo sh traffic_control.sh --devices enp99s0 --delay 200 --rate 300 --loss 20
 [INFO] >>> devices: 'enp99s0'
 [INFO] >>> delay: '200ms'
 [INFO] >>> loss: '20%'
@@ -64,7 +68,7 @@ tao@S20:~/tao$ sudo sh test.sh --devices enp99s0 --delay 200 --rate 300 --loss 2
 [INFO] >>> all devices are configured and ready for testing
 tao@S20:~/tao$ 
 ```
-再次用`ping`和`curl`进行测试，可以看到速率、丢包率和延迟都达到目标:
+再次用`ping`和`curl`进行测试，可以看到速率、丢包率和延迟都达到了预期效果:
 ```
 tao@S20:~/tao$ ping baidu.com
 PING baidu.com (110.242.68.66) 56(84) bytes of data.
@@ -87,9 +91,9 @@ tao@S20:~/tao$ curl -u 'tao_test:******' -X GET http://1.*.*.*/TAO_other/temp/29
   0 2803M    0 7887k    0     0   285k      0  2:47:29  0:00:27  2:47:02  303k^C
 tao@S20:~/tao$ 
 ```
-清除流量控制设置：
+最后，清除上面所作的限制：
 ```
-tao@S20:~/tao$ sudo sh test.sh --devices enp99s0 --clean
+tao@S20:~/tao$ sudo sh traffic_control.sh --devices enp99s0 --clean
 [INFO] >>> devices: 'enp99s0'
 [INFO] >>> cleanup traffic control setting...
 [INFO] >>> device 'enp99s0' traffic control config removed
@@ -98,11 +102,10 @@ tao@S20:~/tao$
 ```
 
 ## 脚本
-sh脚本如下：
+traffic_control.sh脚本如下：
 ```sh
-#!/usr/bin/sh
+#!/usr/bin/env sh
 set -e
-set -o pipefail
 
 
 die() {
@@ -205,13 +208,13 @@ configure_device() {
 config_ingress_traffic() {
     local device="${1}"
 
-    sudo tc qdisc add dev "${device}" handle ffff: ingress
+    tc qdisc add dev "${device}" handle ffff: ingress
 
     for ip_addr in $(echo "${addr}" | tr ',' ' '); do
         if ! check_ip_addr "${ip_addr}"; then
             continue
         fi
-        sudo tc filter add dev "${device}" parent ffff: \
+        tc filter add dev "${device}" parent ffff: \
             protocol ip prio 3 \
             u32 match ip src "${ip_addr}" \
             police rate "${rate}kbps" burst "${rate}k" drop flowid :10
@@ -328,7 +331,7 @@ fi
 ## 命令简介
 `tc`命令主要是用来查看/操作内核中的traffic control的设置。
 
-## TC DESCRIPTION
+### TC DESCRIPTION
 Traffic Control由以下概念组成：
 - **SHAPING**
     When traffic is shaped, its rate of transmission is under control. Shaping may be more than lowering the available bandwidth - it is also used to smooth out bursts in traffic for better network behaviour. Shaping occurs on egress.
@@ -375,7 +378,7 @@ The `pfifo_fast` qdisc is the automatic default in the absence of a configured q
 The classful qdiscs are: `HTB`,`PRIO`,`HFSC`等等
 `HTB`: The Hierarchy Token Bucket implements a rich linksharing hierarchy of classes with an emphasis on conforming to existing practices.(层次结构令牌桶实现了丰富的类链接共享层次结构，重点是符合现有实践。) HTB facilitates guaranteeing bandwidth to classes, while also allowing specification of upper limits to inter-class sharing. It contains `shaping` elements, based on `TBF` and can prioritize classes.
 
-## THEORY理论 OF OPERATION
+### THEORY理论 OF OPERATION
 Classes form a tree, where each class has a single parent. A class may have multiple children. Some qdiscs allow for runtime addition of classes (HTB) while others (PRIO) are created with a static number of children.
 Qdiscs which allow dynamic addition of classes can have zero or more subclasses to which traffic may be enqueued.
 Furthermore, each class contains a `leaf qdisc` which by default has `pfifo` behaviour, although another qdisc can be attached in place. This qdisc may again contain classes, but each class can have only one `leaf qdisc`.
@@ -383,7 +386,7 @@ When a packet enters a classful qdisc it can be classified to one of the classes
 Each node within the tree can have its own filters but higher level filters may also point directly to lower classes.
 If classification did not succeed, packets are enqueued to the leaf qdisc attached to that class. Check qdisc specific manpages for details, however.
 
-## NAMING
+### NAMING
 All qdiscs, classes and filters have IDs, which can either be specified or be automatically assigned.
 IDs consist of **major** number and a **minor** number, separated by a colon - **major:minor**. Both **major** and **minor** are hexadecimal numbers and are limited to 16 bits. There are two special values: root is signified by **major** and **minor** of all ones, and unspecified is all zeros.
 - QDISCS
@@ -393,7 +396,7 @@ IDs consist of **major** number and a **minor** number, separated by a colon - *
 - FILTERS
     Filters have a three part ID, which is only needed when using a hashed filter hierarchy.
 
-## TC COMMANDS
+### TC COMMANDS
 The following commands are available for qdiscs, classes and filter:
 - add
     Add a qdisc, class or filter to a node. For all entities, a **parent** must be passed, either by passing its ID or by attaching directly to the root of a device. When creating a qdisc or a filter, it can be named with the **handle** parameter. A class is named with the **classid** parameter.
