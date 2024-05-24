@@ -329,10 +329,10 @@ fi
 ```
 
 ## TC 命令简介
-`tc`命令主要是用来查看/操作内核中的traffic control的设置。
+`tc`命令主要是用来查看/操作内核中的traffic control设置。
 
 ### TC DESCRIPTION
-Traffic Control由以下概念组成：
+Traffic Control 流量控制由以下概念组成：
 - **SHAPING**
     When traffic is shaped, its rate of transmission is under control. Shaping may be more than lowering the available bandwidth - it is also used to smooth out bursts in traffic for better network behaviour. Shaping occurs on egress.
 - **SCHEDULING**
