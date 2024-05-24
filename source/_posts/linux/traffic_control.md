@@ -336,21 +336,21 @@ Traffic Control由以下概念组成：
 - **SHAPING**
     When traffic is shaped, its rate of transmission is under control. Shaping may be more than lowering the available bandwidth - it is also used to smooth out bursts in traffic for better network behaviour. Shaping occurs on egress.
 - **SCHEDULING**
-    By scheduling the transmission of packets it is possible to improve interactivity for traffic that needs it while still guaranteeing bandwidth to bulk大部分 transfers. Reordering is also called prioritizing, and happens only on egress.
+    By scheduling the transmission of packets it is possible to improve interactivity for traffic that needs it while still guaranteeing bandwidth to bulk<sub>容量,体积,大多数,大部分</sub> transfers. Reordering is also called prioritizing, and happens only on egress.
 - **POLICING**
     Whereas shaping deals with transmission of traffic, policing pertains to traffic arriving. Policing thus occurs on ingress.
 - **DROPPING**
-    Traffic exceeding超过 a set bandwidth may also be dropped forthwith, both on ingress and on egress.
+    Traffic exceeding<sub>超过</sub> a set bandwidth may also be dropped forthwith, both on ingress and on egress.
 
 Processing of traffic is controlled by three kinds of objects: `qdiscs`, `classes` and `filters`.
 - **QDISCS**
-    `qdisc` is short for 'queueing discipline' and it is elementary基础,初级 to understanding traffic control. Whenever the kernel needs to send a packet to an interface, it is enqueued to the qdisc configured for that interface. Immediately afterwards, the kernel tries to get as many packets as possible from the qdisc, for giving them to the network adaptor driver.
+    `qdisc` is short for 'queueing discipline' and it is elementary<sub>基础,初级</sub> to understanding traffic control. Whenever the kernel needs to send a packet to an interface, it is enqueued to the qdisc configured for that interface. Immediately afterwards, the kernel tries to get as many packets as possible from the qdisc, for giving them to the network adaptor driver.
 - **CLASSES**
     Some qdiscs can contain `classes`, which contain further qdiscs - traffic may then be enqueued in any of the inner qdiscs, which are within the classes. When the kernel tries to dequeue a packet from such a `classful qdisc` it can come from any of the classes.A qdisc may for example prioritize certain kinds of traffic by trying to dequeue from certain classes before others.
 - **FILTERS**
-    A `filter` is used by a classful qdisc to determine in which class a packet will be enqueued. Whenever traffic arrives at a class with subclasses, it needs to be classified. Various methods may be employed to do so, one of these are the filters. All filters attached to the class are called, until one of them returns with a verdict判决. It is important to notice that filters reside within qdiscs - they are not masters of what happens.
+    A `filter` is used by a classful qdisc to determine in which class a packet will be enqueued. Whenever traffic arrives at a class with subclasses, it needs to be classified. Various methods may be employed to do so, one of these are the filters. All filters attached to the class are called, until one of them returns with a verdict<sub>判决</sub>. It is important to notice that filters reside within qdiscs - they are not masters of what happens.
     > The available filters are: `basic`, `bpf`, `cgroup`, `route`, `u32`等等，本文用到的是**u32**:
-    > `u32`: Generic filtering on arbitrary packet data. The Universal/Ugly 32bit filter allows one to match arbitrary bitfields in the packet. Due to breaking everything down to values, masks and offsets, It is equally powerful and hard to use. Luckily many abstracting directives are present which allow defining rules on a higher level and therefore free the user from having to fiddle不停摆弄 with bits and masks in many cases.
+    > `u32`: Generic filtering on arbitrary packet data. The Universal/Ugly 32bit filter allows one to match arbitrary bitfields in the packet. Due to breaking everything down to values, masks and offsets, It is equally powerful and hard to use. Luckily many abstracting directives are present which allow defining rules on a higher level and therefore free the user from having to fiddle<sub>不停摆弄</sub> with bits and masks in many cases.
 
 ### QEVENTS
 Qdiscs may invoke user-configured actions when certain interesting events take place in the qdisc. Each `qevent` can either be unused, or can have a block attached to it. To this block are then attached filters using the "tc block BLOCK_IDX" syntax. The block is executed when the qevent associated with the attachment point takes place.
@@ -372,11 +372,11 @@ The `pfifo_fast` qdisc is the automatic default in the absence of a configured q
 - **ingress**
     This is a special qdisc as it applies to incoming traffic on an interface, allowing for it to be filtered and policed.
 - **red**
-    Random Early Detection simulates模拟 physical congestion拥塞 by randomly dropping packets when nearing configured bandwidth allocation分配. Well suited to very large bandwidth applications.主要用于出口网络
+    Random Early Detection simulates physical congestion<sub>拥塞</sub> by randomly dropping packets when nearing configured bandwidth allocation<sub>分配</sub>. Well suited to very large bandwidth applications.主要用于出口网络
 
 ### CLASSFUL QDISCS
 The classful qdiscs are: `HTB`,`PRIO`,`HFSC`等等
-`HTB`: The Hierarchy Token Bucket implements a rich linksharing hierarchy of classes with an emphasis on conforming to existing practices.(层次结构令牌桶实现了丰富的类链接共享层次结构，重点是符合现有实践。) HTB facilitates guaranteeing bandwidth to classes, while also allowing specification of upper limits to inter-class sharing. It contains `shaping` elements, based on `TBF` and can prioritize classes.
+`HTB`: The Hierarchy Token Bucket implements a rich linksharing hierarchy of classes with an emphasis<sub>用来强调某个观点或主题</sub> on conforming<sub>相一致、相符合</sub> to existing practices. HTB facilitates guaranteeing bandwidth to classes, while also allowing specification of upper limits to inter-class sharing. It contains `shaping` elements, based on `TBF` and can prioritize classes.
 
 ### THEORY理论 OF OPERATION
 Classes form a tree, where each class has a single parent. A class may have multiple children. Some qdiscs allow for runtime addition of classes (HTB) while others (PRIO) are created with a static number of children.
