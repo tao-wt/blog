@@ -328,7 +328,7 @@ fi
 
 ```
 
-## 命令简介
+## TC 命令简介
 `tc`命令主要是用来查看/操作内核中的traffic control的设置。
 
 ### TC DESCRIPTION
