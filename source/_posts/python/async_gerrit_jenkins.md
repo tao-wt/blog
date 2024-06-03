@@ -287,7 +287,7 @@ class aEdit:
 获取页面信息字典，并对其中页面内容和版本信息后，更新到服务端。具体API接口信息请参考[atlassian API文档](https://developer.atlassian.com/server/confluence/expansions-in-the-rest-api/ "Expansions in the REST API")
 ```python
 # 使用Personal Access Token
-client = aConfluence(SWE_CONFLUENCE, bearer=CONFL_TOKEN)
+client = aConfluence(CONFLUENCE_URL, bearer=CONFL_TOKEN)
 
 # 指定返回更多的关于body.storage和version的信息
 page = await client.get_page(space, page_id, expand="body.storage,version")
@@ -296,9 +296,9 @@ page = await client.get_page(space, page_id, expand="body.storage,version")
 page['body']["storage"]['value'] = new_content
 page['version']["number"] += 1
 
-# 推送更新到服务端
+# 推送更新到服务端, 并关闭底层连接
 await client.update_page(page_id, page)
-
+await client.close()
 ```
 
 ## 代码实现
