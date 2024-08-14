@@ -19,7 +19,7 @@ The VXLAN protocol is a tunnelling protocol designed to solve the problem of lim
 Unlike most tunnels, a VXLAN is a 1 to N network, not just point to point. A VXLAN device can learn the IP address of the other endpoint either dynamically in a manner similar to a learning bridge, or make use of statically-configured forwarding entries.
 
 ## 原理
-`VXLAN`是在底层物理网络`underlay`之上使用隧道技术，借助`UDP`层构建的`Overlay`的逻辑网络，使逻辑网络与物理网络解耦，实现灵活的组网需求。它对原有的网络架构几乎没有影响，不需要对原网络做任何改动，即可架设一层新的网络。也正是因为这个特性，很多`CNI`插件才会选择`VXLAN`作为通信手段。
+`VXLAN`是在`underlay`底层物理网络之上的一种隧道技术(`Overlay`网络)：其将原始报文封装在`UDP`报文中进行发送，使逻辑网络与物理网络解耦，可以实现灵活的组网需求。它对原有的网络架构几乎没有影响，不需要对原网络做任何改动，即可架设一层新的网络。也正是因为这个特性，很多`CNI`插件才会选择`VXLAN`作为通信手段。
 
 `VXLAN`报文的转发过程：原始报文经过`VTEP`，被Linux内核添加上`VXLAN`头部以及外层的`UDP`头部，再发送出去，对端`VTEP`接收到`VXLAN`报文后拆除外层`UDP`头部，并根据`VXLAN`头部的`VNI`把原始报文发送到目的服务器。
 
@@ -31,7 +31,7 @@ VTEP 转发表的学习可以通过以下两种方式：
 
 ## 本地测试
 ### 基于多播的vxlan
-> This creates a new device named vxlan0. The device uses the multicast group 239.1.1.1 over eth1 to handle traffic for which there is no entry in the forwarding table. The destination port number is set to the IANA-assigned value of 4789.
+> This creates a new device named vxlan0. The device uses the multicast group 239.1.1.1 over eno1 to handle traffic for which there is no entry in the forwarding table. The destination port number is set to the IANA-assigned value of 4789.
 
 36.66上配置如下：
 ```bash
